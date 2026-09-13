@@ -21,10 +21,16 @@ My understanding is this all stems from researchers that mapped out all the path
 *After this dive I decided to add in my own efforts. I am bored and my curiousity had spiked.*
 
 ## My approach.
-So the source of it all is the FlyWire connectome. It is essentially a complete wiring diagram of an adult Drosophila brain (YAY I worked on fruitfly dna before!). Entailing "roughly 140,000 neurons and 50 million synaptic connections". Neurons as nodes and synaptic connections just refers to the wires between these nodes.
+So the source of it all is the FlyWire connectome. It is essentially a complete wiring diagram of an adult Drosophila brain (YAY I worked on fruitfly dna before!). Entailing "roughly 140,000 neurons and 50 million synaptic connections". Neurons as nodes and synaptic connections just refers to the wires between these nodes. 
+
+Also important to mention that my idea of connecting spectral graph neural networks (GNN) with mixture of experts (MoE) GNNs is already formalised as MORGAN (**M**ixture **o**f **R**outed **G**r**a**ph **N**etworks) by Lihui Liu and Yuchen Yan, published at AAAI 2026. Huge thanks to this work. Additionally, I will be implementing my own contributions onto this design.
 
 *Now that I have done the due diligence of prerequisite research, Time to start applying my domain.*
 
-MoE design is the non-negotiable for me... I mean it's an absolute fact that different parts of our brains specialise in certain actions. MoE LLMs have been seen to be lightweight in inference and also have superb performance. For a biology inspired NN this makes sense. Off course we are working with a graph of a fly's brain, so the build starts off with a directed graph **G** for **G** **=** **(V,E)**. Now **V** is the set of neurons in the brain and **E** is the set of synaptic connections in said neurons.
+MoE design is the non-negotiable for me... I mean it's an absolute fact that different parts of our brains specialise in certain actions. MoE LLMs have been seen to be lightweight in inference and also have superb performance. For a biology inspired NN this makes sense. MORGAN decomposes a graph onto an MoE framework and partitions the graph spectrum into frequency bands and assigns a specialized "expert" network to each band. A gating function then dynamically combines these experts based on the input's spectral characteristics (how the graph was broken down aka laplacian eigenvalues). 
+
+Additionally I will be adding cosine dampening to the architecture. The fly brain is a dynamical system. "Neural circuits exhibit oscillatory activity". A damped cosine kernel is a more faithful mathematical description of these biological processes than an MLP. I am also adding it because I can. It's a gap in this space of research and adding the dimension of temporal time dynamics is cool.
+
+Off course we are working with a graph of a fly's brain, so the build starts off with a directed graph **G** for **G** **=** **(V,E)**. Now **V** is the set of neurons in the brain and **E** is the set of synaptic connections in said neurons. 
 
 
