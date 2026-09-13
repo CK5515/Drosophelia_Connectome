@@ -1,5 +1,5 @@
 # Do Fly Brains *actually* think in MORGAN style spectral MoE??? Probably not, but here is what I did find...
-![Fly Connectome Render](./Images/Connectome.jpg)
+![Fly Connectome Render](./Images/Connectome.png)
 ### Testing whether a biologically grounded graph structure can serve useful for a model that is simultaneously efficient, interpretable, and non-linear.
 ## Why..?
 While waiting on my SWAEV AI model training runs to finish I've been scrolling and been seeing a lot of goofy projects related to mapping the fly brain to trade stock, or importing it to Minecraft and training it on those tasks. Resulting in a digital fly doing silly things. Seeing a fly play beat saber made me question what the hell is this all about? Are people using the actual biophysical neurological replica of a fly brain and forcing it to learn these novel tasks... or maybe the answer is more simpler. I have found that for most of these project it is in fact more boring than it seems :(
