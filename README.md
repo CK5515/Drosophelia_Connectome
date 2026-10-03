@@ -101,3 +101,57 @@ Also also...the GPU simulator is not bit-reproducible. The drift measured during
 *The MORGAN Part*
 <hr/>
 
+This is where the "spectral" in "spectral MoE" comes in. Two Laplacians on the 5,000-neuron circuit...
+
++ A signed symmetric one, which throws away direction (which way a synapse points).
++ A signed magnetic one, which keeps direction as a complex phase **(q = 0.25)**.
+
+Full eigendecomposition of each, then chop the spectrum into 4 bands with equal numbers of modes, one per future expert.
+
+The math says eigenvalues must be in [0, 2]. They are. But the spectrum is nowhere near touching the bounds. Symmetric μ ∈ [0.299, 1.6265], magnetic μ ∈ [0.434, 1.5412]. Orthonormality error ~5e-06 against a 1e-3 tolerance. Most modes pile up around μ = 1... the two middle bands are tiny slivers (symmetric band 2 is 0.9438 to 1.0039, band 3 is 1.0039 to 1.0627). About 3,300 of 5,000 symmetric modes (3,100 magnetic) are packed between 0.9 and 1.1.
+
+So "low frequency" here is not a smooth near zero mode. There is no eigenvalue anywhere near 0. The band 1/2 and 3/4 boundaries fall inside a dense... nearly degenerate cluster, so the middle band split is somewhat arbitrary. Nudge a boundary and different modes swap between bands 2 and 3.
+
+Why try magnetic at all? 40,566 of 76,672 reciprocal connections have opposite signs (one side excites, the other inhibits)... those cancel when you symmetrize. That's 53% of all reciprocal pairs. The magnetic version keeps direction instead of cancelling it. But this run does not show that the magnetic version helps. Nothing here tests whether the magnetic basis recovers the information the symmetric one cancels. Also at the resolution of the localization figure the two bases look nearly identical. Test later!
+
+The localization figure (log2 of a band's mean energy in a hop group, versus a mode spread evenly over all neurons) says less than I hoped :( . Most neurons are two hops from the taste neurons (4,309 of 5,000) and two hops from MN9 (4,648 of 5,000)... for those the enrichment is within ±0.02 in every band... the bulk of the circuit is unremarkable. All the action is in the small groups. Taste neurons themselves (88) are enriched in band 3 and depleted in band 1. Near MN9, the outer bands (1 and 4) put about 2× the uniform energy on the 2 MN9 neurons themselves, while the two middle bands nearly avoid them (6-7× below uniform). But that's two specific neurons, and I'm not generalizing it to "output neurons" or anything broader...
+
+Gate passed (both eigenvalue ranges inside [0, 2], both orthonormal). Run: `runs/r3_spectrum/20260929-185738.`
+
+## Step 5
+
+*Baselines*
+<hr/>
+
+Alright. 5 models with same data, split and loss
+
++ `mean`: predict each neuron's average response. The floor.
++ `mlp`: stimulus in, 5,000 rates out, no graph.
++ `chebgru`: Chebyshev graph convolution feeding a GRU.
++ `moe_single` and `moe_linear`: spectral mixture-of-experts variants using the magnetic basis from Step 4 above.
+
+Three seeds each. The gate: the per-neuron-mean floor must score below 0.8 normalised R², otherwise a trivial predictor already lives at the ceiling and everything downstream is meaningless.
+
+**Normalised R² on held-out stimuli (3 seeds each):**
+
+|model	|normalised R²	|parameters|
+|---|---|---|
+|mean (floor)	|0.145	|0|
+|mlp|	0.797 / 0.857 / 0.764	|27,506,028|
+|chebgru|	-2.62 / -1.84 / -4.22	|2,513|
+|moe_single|	-5.88 / -6.46 / -5.96	|323|
+|moe_linear|	-10.83 / -10.86 / -10.96	|425|
+
+The graph-free MLP beats every graph model. On the normalised statistic, the graph models are not just worse than the MLP but far worse than predicting each neuron's mean...
+
+But this isn't the full picture in my opinion. 
+**Here's the fuller picture (seed 0, observed-active neurons, held-out stimuli):**
+
+
+|model	|normalised	|per-neuron mean	|per-neuron median|	pooled|
+|---|---|---|---|---|
+|mean	|0.145|	0.105|	0.036|	0.458|
+|mlp	|0.797|	0.437|	0.371|	0.903|
+|chebgru	|-2.62|	-0.437|	-0.033|	0.868|
+|moe_single	|-5.88|	-1.511|	-0.046|	0.807|
+|moe_linear	|-10.83|	-3.015|	-0.179|	0.768|
