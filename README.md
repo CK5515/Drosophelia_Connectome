@@ -45,7 +45,7 @@ The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert*
 *A circuit and not the whole brain...*
 <hr/>
 
-I think the feeding circuit will be the best to test. **Shiu et al** showed this thing predicts the "proboscis extension". The MN9 motor neuron was something I will keep no matter what. So I kept neurons that sit on short paths from the taste neurons (sugar, bitter, water, Ir94e; 88 total) to MN9. "Short" meaning within **k** hops downstream of a taste neuron and within **k** hops upstream of MN9. Just wiring... the teacher can't leak into the structure. OK
+I think the feeding circuit will be the best to test. **Shiu et al** showed this thing predicts the "proboscis extension". The MN9 motor neuron was something I will keep no matter what. So I kept neurons that sit on short paths from the taste neurons (sugar, bitter, water, Ir94e; 88 total) to MN9. "Short" meaning within **k** hops downstream of a taste neuron and within **k** hops upstream of MN9. Just wiring... the teacher can't leak into the structure. OK.
 
 To be honest I only expected a few thousand neurons at **k = 2**. Well I got 5,516, which blew past my 5,000 cap. I decided to keep the taste neurons and MN9 no matter what, then prefer neurons on shorter "taste-to-MN9 paths", break ties by total synaptic strength.
 
@@ -75,7 +75,7 @@ Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 
 
 The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-trial dataset took about 1.9 hours. The Brian2 reference took 1793 s with 30 processes.
 
-Gate passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). Run: `runs/r2_teacher_validation/20260929-130111.`
+Gate passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). Run: `runs/r2_teacher_validation/20260929-130111`.
 
 **VERY IMPORTANT:**
 
@@ -116,7 +116,7 @@ Why try magnetic at all? 40,566 of 76,672 reciprocal connections have opposite s
 
 The localization figure (log2 of a band's mean energy in a hop group, versus a mode spread evenly over all neurons) says less than I hoped :( . Most neurons are two hops from the taste neurons (4,309 of 5,000) and two hops from MN9 (4,648 of 5,000)... for those the enrichment is within ±0.02 in every band... the bulk of the circuit is unremarkable. All the action is in the small groups. Taste neurons themselves (88) are enriched in band 3 and depleted in band 1. Near MN9, the outer bands (1 and 4) put about 2× the uniform energy on the 2 MN9 neurons themselves, while the two middle bands nearly avoid them (6-7× below uniform). But that's two specific neurons, and I'm not generalizing it to "output neurons" or anything broader...
 
-Gate passed (both eigenvalue ranges inside [0, 2], both orthonormal). Run: `runs/r3_spectrum/20260929-185738.`
+Gate passed (both eigenvalue ranges inside [0, 2], both orthonormal). Run: `runs/r3_spectrum/20260929-185738`.
 
 ## Step 5
 
@@ -164,7 +164,7 @@ The parameter counts are the story behind the table. The MLP has 27.5 million. T
 
 Honestly, almost every graph model hit the 40-epoch cap and was still improving. Best epoch 39 or 40 of 40 for all three moe_linear and all three moe_single seeds and for chebgru seeds 0 and 1. The MLP converged (best epochs 34/33/31). The 40-epoch cap is a compute trim of mine. So "this architecture underperforms an MLP" is currently tied to "this architecture was undertrained". Paired comparisons among the models remain valid since every model got the same budget... the absolute verdict is not.
 
-The gate passed... the mean predictor scores 0.145, well under 0.8, so the task discriminates between models. Run: `runs/p2_r4_baselines/20260930-185745.`
+The gate passed... the mean predictor scores 0.145, well under 0.8, so the task discriminates between models. Run: `runs/p2_r4_baselines/20260930-185745`.
 
 Learning rate detour... because it was a real decision. The first pilot (3 rates, 6 epochs, 300 conditions) picked 3e-3 for every family by final val loss. That's the edge of the grid, and val loss and normalised R² disagreed about the best rate. So I killed the sweep and ran an extended pilot (5 rates, 15 epochs). The two criteria then agreed and chose 3e-2 for the MoE and chebgru families. I overrode that to 1e-2... 3e-2 was again the grid edge, the gain over 1e-2 was marginal, the MLP collapsed at 3e-2, then the real runs take ~7× more steps at the peak rate than the pilot. I traded a few percent of val loss for safety. The MLP kept its own interior optimum of 3e-3.
 
@@ -214,3 +214,33 @@ Two questions I have. Scored by the rule I fixed before seeing any of it... a di
 + Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
 
 
+|comparison|	per-seed difference|	mean	|2 × std	|all same sign?	|verdict|
+|---|---|---|---|---|---|
+|full - linear|	+0.61 / +3.17 / +2.37|	2.046|	2.616	|yes	|no claim|
+|full - single|	-0.50 / +1.84 / +0.86|	0.730|	2.348	|no	|no claim|
+|full - chebgru|	-1.45 / +0.69 / +0.19|	-0.192|	2.242	|no	|no claim|
+|full - mlp|	-3.80 / -1.33 / -2.18|	-2.437|	2.505	|yes	|no claim|
+
+**Results of Rule 1:**
+
+The full model beat its linear ablation in all three seeds (never worse) and still cannot claim it, because seed 1 came in at -0.48 while seed 0 came in at -2.95... and that spread swallows it. The honest read is "suggestive and underpowered at three seeds" and not "no effect." The rule is there precisely so I cannot talk myself past it after the fact. So no claim.
+
+**Results of Rule 2:**
+
+It **passes**. Max timescale ratios of 1.67 / 2.11 / 9.48, so two of three seeds clear 2×. I have to read 9.48 with caution however.
+
+In seed 2's second layer, band 1 is the one expert anywhere in these runs that landed overdamped. Its reported `timescale_ms` of 7 ms is the quantity `bin_ms / γ`, which is the exponential decay time only in the underdamped and critically damped regimes. The blue curve in the figure is visibly the slowest-decaying expert in the panel, not a 7 ms one. The experts there genuinely differ, more dramatically than anywhere else, but the number quantifying it points the wrong way. To be honest I would not quote "9.48×" as a timescale ratio. Seed 1's 2.11× (36 ms against 76 ms, both underdamped) is the clean qualifier.
+
+Everything else is quite normal. 30 to 81 ms, underdamped, oscillating a couple of times and gone inside 400 ms.
+
+**The router is the negative finding...**
+
+So at max, the router learned a stimulus-present/absent detector...but mostly learned nothing. I don't think this is a bug (pun intended!) and I guess I had a hint istarting out... the stimulus space is five-dimensional (five taste channels), the conditions are static steps and the experts all converged on similar kinematics anyway. A router with four near-identical things to route between, locked on five numbers, has very little to do. This is the task I built... nothing about mixtures of experts. My bad.
+
+Rule 1 (does it avoid collapsing to linear?) FAIL: +0.61/+3.17/+2.37, mean 2.046 against a 2σ threshold of 2.616. Positive in every seed, not separable from seed noise.
+
+Rule 2 (do experts specialise in timescale?) PASS: 2 of 3 seeds at 2.11× and 9.48×, with the caveat above on how the 9.48 is measured.
+
+AND the thing that overshadows both... the headline model scores -1.59 mean normalised R² against a mean-predictor floor of 0.145, while stopping at best epoch 38/39/40 of 40 with patience never firing. I am not going to interpret "the spectral MoE loses to predicting each neuron's average" until I know what the epoch cap cost.
+
+Run: `runs/p2_r5_moe/20261003-124145`.
