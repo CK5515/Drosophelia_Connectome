@@ -136,11 +136,11 @@ Three seeds each. The gate: the per-neuron-mean floor must score below 0.8 norma
 
 |model	|normalised R²	|parameters|
 |---|---|---|
-|mean (floor)	|0.145	|0|
-|mlp|	0.797 / 0.857 / 0.764	|27,506,028|
-|chebgru|	-2.62 / -1.84 / -4.22	|2,513|
-|moe_single|	-5.88 / -6.46 / -5.96	|323|
-|moe_linear|	-10.83 / -10.86 / -10.96	|425|
+|`mean` (floor)	|0.145	|0|
+|`mlp`|	0.797 / 0.857 / 0.764	|27,506,028|
+|`chebgru`|	-2.62 / -1.84 / -4.22	|2,513|
+|`moe_single`|	-5.88 / -6.46 / -5.96	|323|
+|`moe_linear`|	-10.83 / -10.86 / -10.96	|425|
 
 The graph-free MLP beats every graph model. On the normalised statistic, the graph models are not just worse than the MLP but far worse than predicting each neuron's mean...
 
@@ -150,8 +150,67 @@ But this isn't the full picture in my opinion.
 
 |model	|normalised	|per-neuron mean	|per-neuron median|	pooled|
 |---|---|---|---|---|
-|mean	|0.145|	0.105|	0.036|	0.458|
-|mlp	|0.797|	0.437|	0.371|	0.903|
-|chebgru	|-2.62|	-0.437|	-0.033|	0.868|
-|moe_single	|-5.88|	-1.511|	-0.046|	0.807|
-|moe_linear	|-10.83|	-3.015|	-0.179|	0.768|
+|`mean`	|0.145|	0.105|	0.036|	0.458|
+|`mlp`	|0.797|	0.437|	0.371|	0.903|
+|`chebgru`	|-2.62|	-0.437|	-0.033|	0.868|
+|`moe_single`	|-5.88|	-1.511|	-0.046|	0.807|
+|`moe_linear`	|-10.83|	-3.015|	-0.179|	0.768|
+
+Notice what happens when you read across the table. The mean is dragged far below zero...neurons that are nearly silent have tiny absolute errors but also tiny variance, so their per-neuron R² explodes negative, a handful of those swamp the average. The median neuron tells a more calm story... the graph models sit roughly level with the per-neuron mean (-0.03, -0.05, -0.18 against +0.04), while the MLP is clearly ahead at 0.37. Also pooled R², which asks whether the model captured the population structure at all, has every model above the floor (0.77 to 0.90 against 0.458).
+
+So the graph models do learn something real about which neurons respond and roughly how much. What they lose is condition-by-condition, per-neuron detail... and a few near-silent neurons turn that loss into huge negative numbers. MN9, the output I care about most, shows the same ordering. Trace R² for the two MN9 neurons is mlp 0.83/0.75, chebgru 0.66/0.59, moe_linear ~0.00, moe_single ~-0.05.
+
+The parameter counts are the story behind the table. The MLP has 27.5 million. The graph models have 425, 323 and 2,513. The graph models are node-agnostic by design... no per-neuron parameters at all, one shared mechanism applied over the connectome. That's exactly what will make the held-out-neuron test and the rewiring control meaningful later... it's also exactly why they cannot memorise per-neuron responses the way the MLP can. Part of the MLP's win is memorisation of 5,000 individual response profiles. I should not read it as "the MLP found better structure."
+
+Honestly, almost every graph model hit the 40-epoch cap and was still improving. Best epoch 39 or 40 of 40 for all three moe_linear and all three moe_single seeds and for chebgru seeds 0 and 1. The MLP converged (best epochs 34/33/31). The 40-epoch cap is a compute trim of mine. So "this architecture underperforms an MLP" is currently tied to "this architecture was undertrained". Paired comparisons among the models remain valid since every model got the same budget... the absolute verdict is not.
+
+The gate passed... the mean predictor scores 0.145, well under 0.8, so the task discriminates between models. Run: `runs/p2_r4_baselines/20260930-185745.`
+
+Learning rate detour... because it was a real decision. The first pilot (3 rates, 6 epochs, 300 conditions) picked 3e-3 for every family by final val loss. That's the edge of the grid, and val loss and normalised R² disagreed about the best rate. So I killed the sweep and ran an extended pilot (5 rates, 15 epochs). The two criteria then agreed and chose 3e-2 for the MoE and chebgru families. I overrode that to 1e-2... 3e-2 was again the grid edge, the gain over 1e-2 was marginal, the MLP collapsed at 3e-2, then the real runs take ~7× more steps at the peak rate than the pilot. I traded a few percent of val loss for safety. The MLP kept its own interior optimum of 3e-3.
+
+## Step 5 ½ ???
+
+*I was wrong about silent neurons :(*
+<hr/>
+
+Step 4's runs trained on `ever_active`... the 1,062 neurons that spike at least once somewhere in the dataset. The alternative, `all_observed`, trains on all 4,018 observed neurons including the ones that are silent throughout. I had assumed the silent neurons would flatten the signal and make training worse. **So I ran a two-arm A/B on moe_full, three seeds each:**
+
+
+|loss mask|	neurons in the loss|	normalised R² (seeds 0/1/2)|	mean|
+|---|---|---|---|
+|`ever_active`|	1,062|	-7.98 / -5.80 / -7.29	|-7.02|
+|`all_observed`|	4,018|	-2.95 / -0.48 / -1.35	|-1.59|
+
+A difference of 5.43 against a pooled seed spread of 1.68. My assumption was wrong... by a lot! Training on the silent neurons helps a great deal. I assume it is because "stay quiet" is most of what this circuit does. I guess a model that is never asked to learn it spends its capacity badly.
+
+**So I ran it back, the whole baseline set under `all_observed` now (12 runs, 21 h 54 m):**
+
+
+|model|	`ever_active` (old)|	`all_observed` (new)|	best epoch of 40|
+|---|---|---|---|
+|`mean` (floor)|	0.145|	0.145	| N/A|
+|`mlp`|	0.797 / 0.857 / 0.764|	0.852 / 0.855 / 0.828|	34 / 33 / 30|
+|`chebgru`|	-2.62 / -1.84 / -4.22|	-1.49 / -1.17 / -1.53	|40 / 40 / 40|
+|`moe_single`|	-5.88 / -6.46 / -5.96|	-2.45 / -2.32 / -2.21|	39 / 38 / 39|
+|`moe_linear`|	-10.83 / -10.86 / -10.96|	-3.56 / -3.65 / -3.71	|39 / 39 / 40|
+|`moe_full`|	-7.98 / -5.80 / -7.29|	-2.95 / -0.48 / -1.35	|39 / 38 / 40|
+
+The mean predictor scores identically under both masks (0.14491 to five figures). This is the check I wanted. Every graph model improved very nicely and chebgru's seed-2 instability vanished... its three seeds now sit in a 0.36-wide band instead of a 2.4-wide one. The ordering did not change at all. The MLP still wins... every graph model is still far below the mean-predictor floor. A better loss mask made the graph models much less bad without making them good.
+
+Under `all_observed`, every graph model stopped at best epoch 38, 39 or 40 out of 40, in every seed, with early-stopping patience never firing, while the MLP converged at 30 to 34. The budget binds the architectures I am testing and does not bind the one they are losing to.
+
+Run: `runs/p2_baselines_all_observed/20261002-143604`
+
+## Step 6
+
+*The MoE Level*
+<hr/>
+
+This is what the whole project was built for. Four dampedwave experts, one per frequency band, an input-dependent router, two layers with a nonlinearity between them. 
+
+Two questions I have. Scored by the rule I fixed before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign.
+
++ Rule 1 (non-collapse): does moe_full beat moe_linear? If not, the architecture is an expensive linear filter.
++ Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
+
+
