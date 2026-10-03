@@ -38,4 +38,37 @@ Additionally I will be adding cosine dampening to the architecture. The fly brai
 
 Off course we are working with a graph of a fly's brain, so the build starts off with a directed graph **G** for **G** **=** **(V,E)**. Now **V** is the set of neurons in the brain and **E** is the set of synaptic connections in said neurons. 
 
+The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert* happens I need to carve out a piece that's small enough to actually train on and still meaningful as a computation. First constraint done...
+
+## Step 1 
+
+*I need a circuit and not the whole brain...*
+
+I think the feeding circuit will be the best to test. **Shiu et al** showed this thing predicts the "proboscis extension". The MN9 motor neuron was something I will keep no matter what. So I kept neurons that sit on short paths from the taste neurons (sugar, bitter, water, Ir94e; 88 total) to MN9. "Short" meaning within **k** hops downstream of a taste neuron and within **k** hops upstream of MN9. Just wiring... the teacher can't leak into the structure. OK
+
+To be honest I only expected a few thousand neurons at **k = 2**. Well I got 5,516, which blew past my 5,000 cap. I decided to keep the taste neurons and MN9 no matter what, then prefer neurons on shorter "taste-to-MN9 paths", break ties by total synaptic strength.
+
+So the final circuit is 5,000 neurons, 548,286 edges, 40.1% inhibitory. Median out-degree 93, median in-degree 85. Roughly bell shaped on a log axis, with in-degree having the fatter low-degree tail. All five gate checks passed (size in range, all 88 taste neurons present, both MN9 neurons present, a directed path from taste to each MN9, no isolated neurons). Run: `runs/r1_subcircuit/20260929-113520.`
+
+Cool. I have a graph.
+
+## Step 2 
+
+*I need a GPU fly that agrees with the real fly...*
+
+Shiu's model is a leaky integrate-and-fire spiking network written in Brian2. It runs on CPU. Pointless for generating 12,000 trials of training data. So I rewrote the whole thing in PyTorch to run batched on a 3060
+
+First things first... does my GPU fly agree with Shiu's fly? The port had to match Brian2 spike-for-spike on a 50-neuron toy network first (it did), and then I ran the original Brian2 code side by side with my port on the whole 127,400-neuron brain: sugar neurons at 50-200 Hz, and sugar at 100 Hz with bitter at 0-200 Hz, 30 trials each.
+
+**The MN9 dose-response numbers (port vs Brian2, mean ± 2 SE):**
+
+
+| sugar (Hz) | port |	Brian2 |
+|---|---|---|
+| 50	| 19.8 ± 2.4 |	19.5 ± 2.2 |
+| 100	| 67.7 ± 1.7 |	67.8 ± 1.2 |
+| 150	| 83.0 ± 2.0 |	84.4 ± 1.6 |
+| 200	| 92.6 ± 1.4 |	90.6 ± 2.2 |
+
+
 
