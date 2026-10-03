@@ -237,9 +237,9 @@ Everything else is quite normal. 30 to 81 ms, underdamped, oscillating a couple 
 
 So at max, the router learned a stimulus-present/absent detector...but mostly learned nothing. I don't think this is a bug (pun intended!) and I guess I had a hint istarting out... the stimulus space is five-dimensional (five taste channels), the conditions are static steps and the experts all converged on similar kinematics anyway. A router with four near-identical things to route between, locked on five numbers, has very little to do. This is the task I built... nothing about mixtures of experts. My bad.
 
-Rule 1 (does it avoid collapsing to linear?) FAIL: +0.61/+3.17/+2.37, mean 2.046 against a 2σ threshold of 2.616. Positive in every seed, not separable from seed noise.
+**Rule 1 (does it avoid collapsing to linear?)** FAIL: +0.61/+3.17/+2.37, mean 2.046 against a 2σ threshold of 2.616. Positive in every seed, not separable from seed noise.
 
-Rule 2 (do experts specialise in timescale?) PASS: 2 of 3 seeds at 2.11× and 9.48×, with the caveat above on how the 9.48 is measured.
+**Rule 2 (do experts specialise in timescale?)** PASS: 2 of 3 seeds at 2.11× and 9.48×, with the caveat above on how the 9.48 is measured.
 
 AND the thing that overshadows both... the headline model scores -1.59 mean normalised R² against a mean-predictor floor of 0.145, while stopping at best epoch 38/39/40 of 40 with patience never firing. I am not going to interpret "the spectral MoE loses to predicting each neuron's average" until I know what the epoch cap cost.
 
