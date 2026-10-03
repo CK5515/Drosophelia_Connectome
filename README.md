@@ -42,7 +42,8 @@ The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert*
 
 ## Step 1 
 
-*I need a circuit and not the whole brain...*
+*A circuit and not the whole brain...*
+<hr/>
 
 I think the feeding circuit will be the best to test. **Shiu et al** showed this thing predicts the "proboscis extension". The MN9 motor neuron was something I will keep no matter what. So I kept neurons that sit on short paths from the taste neurons (sugar, bitter, water, Ir94e; 88 total) to MN9. "Short" meaning within **k** hops downstream of a taste neuron and within **k** hops upstream of MN9. Just wiring... the teacher can't leak into the structure. OK
 
@@ -54,14 +55,14 @@ Cool. I have a graph.
 
 ## Step 2 
 
-*I need a GPU fly that agrees with the real fly...*
+*A GPU fly that agrees with the real fly...*
+<hr/>
 
 Shiu's model is a leaky integrate-and-fire spiking network written in Brian2. It runs on CPU. Pointless for generating 12,000 trials of training data. So I rewrote the whole thing in PyTorch to run batched on a 3060
 
 First things first... does my GPU fly agree with Shiu's fly? The port had to match Brian2 spike-for-spike on a 50-neuron toy network first (it did), and then I ran the original Brian2 code side by side with my port on the whole 127,400-neuron brain: sugar neurons at 50-200 Hz, and sugar at 100 Hz with bitter at 0-200 Hz, 30 trials each.
 
 **The MN9 dose-response numbers (port vs Brian2, mean ± 2 SE):**
-
 
 | sugar (Hz) | port |	Brian2 |
 |---|---|---|
@@ -70,5 +71,33 @@ First things first... does my GPU fly agree with Shiu's fly? The port had to mat
 | 150	| 83.0 ± 2.0 |	84.4 ± 1.6 |
 | 200	| 92.6 ± 1.4 |	90.6 ± 2.2 |
 
+Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 in both (from ~67 Hz down to 3.5/4.5 Hz at 100 Hz bitter, essentially silent at 200 Hz). Across 346 active neurons, rates correlate at r = 0.9995. Even excluding the 21 Poisson-driven sugar neurons, r = 0.9996 on the 325 neurons that only fire because of the network.
 
+The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-trial dataset took about 1.9 hours. The Brian2 reference took 1793 s with 30 processes.
+
+Gate passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). Run: `runs/r2_teacher_validation/20260929-130111.`
+
+**VERY IMPORTANT:**
+
+*Brian2 validation covered only the 346 neurons active under sugar at 100 Hz. Of those, at least 330 are in my 5,000-neuron circuit, against the ~1,330 circuit neurons that are ever active in the dataset. So the comparison touched roughly a quarter of the circuit's active neurons. The teacher's accuracy on the near silent majority is unvalidated. Also, the Brian2 comparison drove only sugar_R and bitter at constant drive for the full second... the dataset drives all five taste channels with a 500 ms on / 500 ms off step, supervised in 20 ms bins. The off-period and the 20 ms bin structure are validated only by the 50-neuron test, not at whole-brain scale. And sugar_L, water, and Ir94e were never compared against Brian2 at all.*
+
+*So "validated teacher" means "validated on the part of the circuit that was active under one specific stimulus".*
+
+## Step 3
+
+*The dataset*
+<hr/>
+
+3000 taste cocktails × 4 trials, 50 bins of 20 ms, 5000 neurons = 3 GB. Generated in 1.95 hours.
+
+**73.4% of the circuit never fired at all.** Those get excluded from R² later. Only ~1,330 of 5,000 neurons carry any signal, and 90.4% fire below 1 Hz on average. Median neuron rate: 0.0 Hz. MN9 during stimulus: 10th/50th/90th percentile 0.0 / 5.0 / 72.5 Hz.
+
+That low median is consistent with bitter-heavy cocktails silencing MN9. The numbers alone don't prove that mechanism. Also the 3 GB is mostly zeros.
+
+Also also...the GPU simulator is not bit-reproducible. The drift measured during validation was about 0.2 Hz on an MN9 mean of ~90 Hz... which is well inside the ~1 Hz standard error. For training all good but not fine if you want to reproduce my exact bytes.
+
+## Step 4
+
+*The MORGAN Part*
+<hr/>
 
