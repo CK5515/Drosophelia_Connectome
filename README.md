@@ -34,13 +34,15 @@ MoE design is the non-negotiable for me... I mean it's an absolute fact that dif
 
 + MORGAN splits a graph onto an MoE framework and parts the graph spectrum into frequency bands. It assigns a specialized "expert" network to each band. A gating function then dynamically combines these experts based on the input's spectral characteristics (so how the graph was broken down aka laplacian eigenvalues). 
 
-Additionally I will be adding cosine dampening to the architecture. The fly brain is a dynamical system. "Neural circuits exhibit oscillatory activity". A damped cosine kernel is a more faithful mathematical description of these biological processes than an MLP. I am also adding it because I can. It's a gap in this space of research and adding the dimension of temporal time dynamics is cool.
+Additionally I will be adding cosine dampening to the architecture. The fly brain is a dynamical system. "Neural circuits exhibit oscillatory activity". A damped cosine kernel is a more faithful mathematical description of these biological processes than an MLP. I am also adding it because I can. It's a gap in this space of research and adding the dimension of temporal time dynamics is cool. The equation for a cosine dampened by eulers number (very nice differentiation) is...
+
+$$cos(ωt + φ) · e^(αt)$$
 
 Off course we are working with a graph of a fly's brain, so the build starts off with a directed graph **G** for **G** **=** **(V,E)**. Now **V** is the set of neurons in the brain and **E** is the set of synaptic connections in said neurons. 
 
-The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert* happens I need to carve out a piece that's small enough to actually train on and still meaningful as a computation. First constraint done...
+The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert* happens I need to carve out a piece that's small enough to actually train on and still meaningful as a computation. My crappy dl380p cannot handle all that. First constraint done...
 
-## 1 
+## 1.
 
 *A circuit and not the whole brain...*
 <hr/>
@@ -53,7 +55,7 @@ So the final circuit is 5,000 neurons, 548,286 edges, 40.1% inhibitory. Median o
 
 Cool. I have a graph.
 
-## 2 
+## 2. 
 
 *A GPU fly that agrees with the real fly...*
 <hr/>
@@ -64,12 +66,12 @@ First things first... does my GPU fly agree with Shiu's fly? The port had to mat
 
 **The MN9 dose-response numbers (port vs Brian2, mean ± 2 SE):**
 
-| sugar (Hz) | port |	Brian2 |
+| sugar (Hz) | port |	Brian2|
 |---|---|---|
 | 50	| 19.8 ± 2.4 |	19.5 ± 2.2 |
 | 100	| 67.7 ± 1.7 |	67.8 ± 1.2 |
 | 150	| 83.0 ± 2.0 |	84.4 ± 1.6 |
-| 200	| 92.6 ± 1.4 |	90.6 ± 2.2 |
+| 200	| 92.6 ± 1.4 |	90.6 ± 2.2|
 
 Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 in both (from ~67 Hz down to 3.5/4.5 Hz at 100 Hz bitter, essentially silent at 200 Hz). Across 346 active neurons, rates correlate at r = 0.9995. Even excluding the 21 Poisson-driven sugar neurons, r = 0.9996 on the 325 neurons that only fire because of the network.
 
@@ -83,7 +85,7 @@ Gate passed on all three checks (MN9 dose response, bitter suppression, network-
 
 *So "validated teacher" means "validated on the part of the circuit that was active under one specific stimulus".*
 
-## 3
+## 3.
 
 *The dataset*
 <hr/>
@@ -96,7 +98,7 @@ That low median is consistent with bitter-heavy cocktails silencing MN9. The num
 
 Also also...the GPU simulator is not bit-reproducible. The drift measured during validation was about 0.2 Hz on an MN9 mean of ~90 Hz... which is well inside the ~1 Hz standard error. For training all good but not fine if you want to reproduce my exact bytes.
 
-## 4
+## 4.
 
 *The MORGAN Part*
 <hr/>
@@ -118,7 +120,7 @@ The localization figure (log2 of a band's mean energy in a hop group, versus a m
 
 Gate passed (both eigenvalue ranges inside [0, 2], both orthonormal). Run: `runs/r3_spectrum/20260929-185738`.
 
-## 5
+## 5.
 
 *Baselines*
 <hr/>
@@ -168,7 +170,7 @@ The gate passed... the mean predictor scores 0.145, well under 0.8, so the task 
 
 Learning rate detour... because it was a real decision. The first pilot (3 rates, 6 epochs, 300 conditions) picked 3e-3 for every family by final val loss. That's the edge of the grid, and val loss and normalised R² disagreed about the best rate. So I killed the sweep and ran an extended pilot (5 rates, 15 epochs). The two criteria then agreed and chose 3e-2 for the MoE and chebgru families. I overrode that to 1e-2... 3e-2 was again the grid edge, the gain over 1e-2 was marginal, the MLP collapsed at 3e-2, then the real runs take ~7× more steps at the peak rate than the pilot. I traded a few percent of val loss for safety. The MLP kept its own interior optimum of 3e-3.
 
-## 5 ½ ???
+## 5 ½. ???
 
 *I was wrong about silent neurons :(*
 <hr/>
@@ -201,7 +203,7 @@ Under `all_observed`, every graph model stopped at best epoch 38, 39 or 40 out o
 
 Run: `runs/p2_baselines_all_observed/20261002-143604`
 
-## 6
+## 6.
 
 *The MoE Level*
 <hr/>
@@ -249,7 +251,7 @@ Run: `runs/p2_r5_moe/20261003-124145`.
 
 I suppose what is next is the control that decides whether any of this is about the fly. A rewired connectome with identical degrees and signs. A direction-blind symmetric basis, both retrained from scratch. If the graph models do just as well on a rewired graph, then the connectome structure isn't doing the work. If they don't, then maybe there's something there. This will hopefully work or at least bring me some useful info.
 
-## 7
+## 7.
 
 *The connectome matters*
 <hr/>
