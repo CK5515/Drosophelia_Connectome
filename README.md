@@ -1,7 +1,7 @@
 # Do Fly Brains *actually* think in MORGAN style spectral MoE??? Probably not, but here is what I did find...
 ![Fly Connectome Render](./Images/Connectome.png)
 ### Testing a *biologically inspired* graph model that is efficient and interpretable. Non linear too.
-[Summary ^v^](./RESULTS.md)
+[Summary here! ^v^](./RESULTS.md)
 ## Why..?
 While waiting on my SWAEV AI model training runs to finish I've been scrolling and been seeing a lot of goofy projects related to mapping the fly brain to trade stock, or importing it to Minecraft and training it on those tasks. Resulting in a digital fly doing silly things. Seeing a fly play beat saber made me question what the hell is this all about? Are people using the actual biophysical neurological replica of a fly brain and forcing it to learn these novel tasks... or maybe the answer is more simpler. I have found that for most of these project it is in fact more boring than it seems :(
 
@@ -21,7 +21,7 @@ My understanding is this all stems from researchers that mapped out all the path
 
 Also important to mention that my idea of connecting spectral graph neural networks (GNN) with mixture of experts (MoE) GNNs is already formalised as MORGAN (**M**ixture **o**f **R**outed **G**r**a**ph **N**etworks) by Lihui Liu and Yuchen Yan, published at AAAI 2026. Huge thanks to this work. Additionally, I will be implementing my own contributions onto this design.
 
-*After this dive I decided to add in my own efforts. I am bored and my curiousity had spiked.*
+*After this dive I decided to add in my own efforts. I am bored and my curiousity had spiked!*
 
 ## My approach.
 So the source of it all is the FlyWire connectome. It is essentially a complete wiring diagram of an adult Drosophila brain (YAY I worked on fruitfly dna before!). Entailing "roughly 140,000 neurons and 50 million synaptic connections". Neurons as nodes and synaptic connections just refers to the wires between these nodes. 
@@ -77,7 +77,7 @@ The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-tria
 
 Gate passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). Run: `runs/r2_teacher_validation/20260929-130111`.
 
-**VERY IMPORTANT:**
+**PLEASE READ HOWEVER**
 
 *Brian2 validation covered only the 346 neurons active under sugar at 100 Hz. Of those, at least 330 are in my 5,000-neuron circuit, against the ~1,330 circuit neurons that are ever active in the dataset. So the comparison touched roughly a quarter of the circuit's active neurons. The teacher's accuracy on the near silent majority is unvalidated. Also, the Brian2 comparison drove only sugar_R and bitter at constant drive for the full second... the dataset drives all five taste channels with a 500 ms on / 500 ms off step, supervised in 20 ms bins. The off-period and the 20 ms bin structure are validated only by the 50-neuron test, not at whole-brain scale. And sugar_L, water, and Ir94e were never compared against Brian2 at all.*
 
@@ -247,7 +247,7 @@ AND the thing that overshadows both... the headline model scores -1.59 mean norm
 
 Run: `runs/p2_r5_moe/20261003-124145`.
 
-## Pause 
+## Reflection time
 
 *What did I learn?*
 <hr/>
@@ -262,7 +262,7 @@ Run: `runs/p2_r5_moe/20261003-124145`.
 
 + The epoch cap is still tied with everything. Every graph model hit the 40-epoch cap and was still improving... the MLP converged. Until I price the cap with a longer single-seed probe, I'm treating the graph models absolute scores as lower bounds for now.
 
-**NEXT STEPS:** the control that decides whether any of this is about the fly. A rewired connectome with identical degrees and signs. A direction-blind symmetric basis, both retrained from scratch. If the graph models do just as well on a rewired graph, then the connectome structure isn't doing the work. If they don't, then maybe there's something there. This will hopefully work or at least bring me some useful info.
+I suppose what is next is the control that decides whether any of this is about the fly. A rewired connectome with identical degrees and signs. A direction-blind symmetric basis, both retrained from scratch. If the graph models do just as well on a rewired graph, then the connectome structure isn't doing the work. If they don't, then maybe there's something there. This will hopefully work or at least bring me some useful info.
 
 ## Step 7
 
@@ -316,6 +316,6 @@ Additionally... band 1, the ONE live expert, has a negative knockout effect at o
 
 OK this is what I think is going on...Part 5 concluded the router never learned to route. This shows the cost. With three experts inert, `moe_full` is what I can describe as a single-expert model with a wasted parameter budget. Exactly consistent with Rule 1 failing to separate it from `moe_linear` AND with `moe_single` being within noise of it. The architecture's central idea that different frequency bands want different damped kernels and a router should pick between them never even engaged on this task.
 
-**Conclusions conclusions...**Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
+**Conclusions conclusions...** Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
 
 Run: `runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/12_r6_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
