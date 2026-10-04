@@ -2,8 +2,8 @@
 ![Fly Connectome Render](./Images/Connectome.png)
 ### Testing a *biologically inspired* graph model that is efficient and interpretable. Non linear too.
 [Summary here! ^v^](./RESULTS.md)
-## Why..?
-While waiting on my SWAEV AI model training runs to finish I've been scrolling and been seeing a lot of goofy projects related to mapping the fly brain to trade stock, or importing it to Minecraft and training it on those tasks. Resulting in a digital fly doing silly things. Seeing a fly play beat saber made me question what the hell is this all about? Are people using the actual biophysical neurological replica of a fly brain and forcing it to learn these novel tasks... or maybe the answer is more simpler. I have found that for most of these project it is in fact more boring than it seems :(
+## But why..?
+While waiting on my SWAEV AI model training runs to finish I've been scrolling instagram and been seeing a lot of goofy projects related to mapping the fly brain to trade stock, or importing it to Minecraft and training it on those tasks. Resulting in a digital fly doing silly things. Seeing a fly play beat saber made me question what the hell is this all about? Are people using the actual biophysical neurological replica of a fly brain and forcing it to learn these novel tasks... or maybe the answer is more simpler. I have found that for most of these project it is in fact more boring than it seems :(
 
 My understanding is this all stems from researchers that mapped out all the pathways in a fly's brain. Huge respect. That is awesome and the dedication is insane. Releasing this in form of a graph of all the connections is the basis that these projects go off of. Mapping perceptrons onto the nodes of the graph in place of biological neurons is the methods they are using to bring the brain "to life". So the architecture of the graph serving as an actual fly in these projects is kinda a stretch to me. I mean its just altering the structure of a neural network... the rest is just standard dense neural network and transformer practice. This is true at least for these goofy applications of the fly brain structure. I have found that there are researchers genuinely creating novel neural network architectures to mimic and capture the biophysicalities of the fly. Sick. I love applying biophysics to neural networks to make them make more sense and learn more about biology. Here are some cool stuff I did find:
 
@@ -40,7 +40,7 @@ Off course we are working with a graph of a fly's brain, so the build starts off
 
 The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert* happens I need to carve out a piece that's small enough to actually train on and still meaningful as a computation. First constraint done...
 
-## Step 1 
+## 1 
 
 *A circuit and not the whole brain...*
 <hr/>
@@ -53,7 +53,7 @@ So the final circuit is 5,000 neurons, 548,286 edges, 40.1% inhibitory. Median o
 
 Cool. I have a graph.
 
-## Step 2 
+## 2 
 
 *A GPU fly that agrees with the real fly...*
 <hr/>
@@ -77,13 +77,13 @@ The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-tria
 
 Gate passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). Run: `runs/r2_teacher_validation/20260929-130111`.
 
-**PLEASE READ HOWEVER**
+**PLEASE READ!!!!**
 
 *Brian2 validation covered only the 346 neurons active under sugar at 100 Hz. Of those, at least 330 are in my 5,000-neuron circuit, against the ~1,330 circuit neurons that are ever active in the dataset. So the comparison touched roughly a quarter of the circuit's active neurons. The teacher's accuracy on the near silent majority is unvalidated. Also, the Brian2 comparison drove only sugar_R and bitter at constant drive for the full second... the dataset drives all five taste channels with a 500 ms on / 500 ms off step, supervised in 20 ms bins. The off-period and the 20 ms bin structure are validated only by the 50-neuron test, not at whole-brain scale. And sugar_L, water, and Ir94e were never compared against Brian2 at all.*
 
 *So "validated teacher" means "validated on the part of the circuit that was active under one specific stimulus".*
 
-## Step 3
+## 3
 
 *The dataset*
 <hr/>
@@ -96,7 +96,7 @@ That low median is consistent with bitter-heavy cocktails silencing MN9. The num
 
 Also also...the GPU simulator is not bit-reproducible. The drift measured during validation was about 0.2 Hz on an MN9 mean of ~90 Hz... which is well inside the ~1 Hz standard error. For training all good but not fine if you want to reproduce my exact bytes.
 
-## Step 4
+## 4
 
 *The MORGAN Part*
 <hr/>
@@ -118,7 +118,7 @@ The localization figure (log2 of a band's mean energy in a hop group, versus a m
 
 Gate passed (both eigenvalue ranges inside [0, 2], both orthonormal). Run: `runs/r3_spectrum/20260929-185738`.
 
-## Step 5
+## 5
 
 *Baselines*
 <hr/>
@@ -168,7 +168,7 @@ The gate passed... the mean predictor scores 0.145, well under 0.8, so the task 
 
 Learning rate detour... because it was a real decision. The first pilot (3 rates, 6 epochs, 300 conditions) picked 3e-3 for every family by final val loss. That's the edge of the grid, and val loss and normalised R² disagreed about the best rate. So I killed the sweep and ran an extended pilot (5 rates, 15 epochs). The two criteria then agreed and chose 3e-2 for the MoE and chebgru families. I overrode that to 1e-2... 3e-2 was again the grid edge, the gain over 1e-2 was marginal, the MLP collapsed at 3e-2, then the real runs take ~7× more steps at the peak rate than the pilot. I traded a few percent of val loss for safety. The MLP kept its own interior optimum of 3e-3.
 
-## Step 5 ½ ???
+## 5 ½ ???
 
 *I was wrong about silent neurons :(*
 <hr/>
@@ -201,7 +201,7 @@ Under `all_observed`, every graph model stopped at best epoch 38, 39 or 40 out o
 
 Run: `runs/p2_baselines_all_observed/20261002-143604`
 
-## Step 6
+## 6
 
 *The MoE Level*
 <hr/>
@@ -247,24 +247,9 @@ AND the thing that overshadows both... the headline model scores -1.59 mean norm
 
 Run: `runs/p2_r5_moe/20261003-124145`.
 
-## Reflection time
-
-*What did I learn?*
-<hr/>
-
-+ The graph-free MLP wins... although that's not the whole truth. The graph models are node-agnostic (only hundreds of parameters, not millions!) and they capture population structure (pooled R² above the floor) even when per-neuron detail is bad. The MLP's win is partly memorisation of 5,000 individual response profiles. The interesting comparison is the held-out-neuron test, which the MLP can't even take at all.
-
-+ The loss mask mattered a good bit. Training on silent neurons helped every graph model by a lot. Staying quiet is most of what this circuit does and a model that is never asked to learn it spends its capacity badly. I was wrong about this, thankfully the A/B caught it.
-
-+ The router didn't route. The gate is input-independent in every seed. With four near-identical experts and a five-dimensional static stimulus... there was really nothing for it to do. That's the task I built, not the MoE. My mistake.
-
-+ The experts kinda did specialise. Two of three seeds cleared 2× timescale ratio, one of them cleanly, one with a measurement caveat that points the wrong way. The experts are not identical, which is something I suppose.
-
-+ The epoch cap is still tied with everything. Every graph model hit the 40-epoch cap and was still improving... the MLP converged. Until I price the cap with a longer single-seed probe, I'm treating the graph models absolute scores as lower bounds for now.
-
 I suppose what is next is the control that decides whether any of this is about the fly. A rewired connectome with identical degrees and signs. A direction-blind symmetric basis, both retrained from scratch. If the graph models do just as well on a rewired graph, then the connectome structure isn't doing the work. If they don't, then maybe there's something there. This will hopefully work or at least bring me some useful info.
 
-## Step 7
+## 7
 
 *The connectome matters*
 <hr/>
