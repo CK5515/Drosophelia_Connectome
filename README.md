@@ -1,23 +1,23 @@
 # Do Fly Brains *actually* think in MORGAN style spectral MoE??? Probably not, but here is what I did find...
 ![Fly Connectome Render](./Images/Connectome.png)
 ### Testing a *biologically inspired* graph model that is efficient and interpretable. Non linear too.
-[Summary here! ^v^](./RESULTS.md)
+[Summary here! ^v^ Click to skip the jargon...](./RESULTS.md)
 ## But why..?
 While waiting on my SWAEV AI model training runs to finish I've been scrolling instagram and been seeing a lot of goofy projects related to mapping the fly brain to trade stock, or importing it to Minecraft and training it on those tasks. Resulting in a digital fly doing silly things. Seeing a fly play beat saber made me question what the hell is this all about? Are people using the actual biophysical neurological replica of a fly brain and forcing it to learn these novel tasks... or maybe the answer is more simpler. I have found that for most of these project it is in fact more boring than it seems :(
 
 My understanding is this all stems from researchers that mapped out all the pathways in a fly's brain. Huge respect. That is awesome and the dedication is insane. Releasing this in form of a graph of all the connections is the basis that these projects go off of. Mapping perceptrons onto the nodes of the graph in place of biological neurons is the methods they are using to bring the brain "to life". So the architecture of the graph serving as an actual fly in these projects is kinda a stretch to me. I mean its just altering the structure of a neural network... the rest is just standard dense neural network and transformer practice. This is true at least for these goofy applications of the fly brain structure. I have found that there are researchers genuinely creating novel neural network architectures to mimic and capture the biophysicalities of the fly. Sick. I love applying biophysics to neural networks to make them make more sense and learn more about biology. Here are some cool stuff I did find:
 
-+ **FlyGM (Fly-connectomic Graph Model)** -> *Zehao Jin, Yaoye Zhu, Chen Zhang, Yanan Sui* (**Tsinghua / Georgia Tech**). Directed message-passing graph where **nodes are neurons** partitioned into *afferent / intrinsic / efferent pools* and **edges encode real FlyWire connectivity**. Synapse weights define a *sparse linear aggregation operator*; each neuron carries trainable intrinsic parameters. Trained with **PPO** for whole-body locomotion.
++ **FlyGM (Fly-connectomic Graph Model)** -> *Zehao Jin, Yaoye Zhu, Chen Zhang, Yanan Sui* (**Tsinghua / Georgia Tech**).
 
-+ **BPU (Biological Processing Unit)** -> *Siyu Yu, Zihan Qin, Tingshan Liu, Beiya Xu, R. Jacob Vogelstein, Jason Brown, Joshua T. Vogelstein* (**Johns Hopkins**). Fixed-weight recurrent core from the complete *Drosophila larval connectome* (~3,000 neurons, ~65k synapses). Synaptic weights are taken directly from the connectome and **never updated**; only input and output projections are trained. Scaled via *degree-corrected stochastic block model*.
++ **BPU (Biological Processing Unit)** -> *Siyu Yu, Zihan Qin, Tingshan Liu, Beiya Xu, R. Jacob Vogelstein, Jason Brown, Joshua T. Vogelstein* (**Johns Hopkins**). 
 
-+ **Shiu et al. LIF model** -> *Philip Shiu, Gabriella Sterne, Salil Bidaye* (**UC Berkeley → Eon Systems**). Whole-brain leaky integrate-and-fire spiking network built from the adult **FlyWire connectome** (~140k neurons, ~50M synapses). **No training at all** -> connectivity + predicted neurotransmitter identity alone predict motor output (**95% accuracy** on proboscis extension).
++ **Shiu et al. LIF model** -> *Philip Shiu, Gabriella Sterne, Salil Bidaye* (**UC Berkeley → Eon Systems**). 
 
-+ **Lappalainen et al. connectome-constrained network** -> *Janne K. Lappalainen, Fabian D. Tschopp, Sridhama Prakhya, Mason McGill, Aljoscha Nern, Kazunori Shinomiya, Shin-ya Takemura, Eyal Gruntman, Jakob H. Macke, Srinivas C. Turaga* (**Tübingen / Janelia / Stanford**). Recurrent network for **64 visual cell types** where connectivity structure is fixed from the connectome; only a reduced set of parameters is learned via a *motion-detection task*. Predicts neural activity across the visual system.
++ **Lappalainen et al. connectome-constrained network** -> *Janne K. Lappalainen, Fabian D. Tschopp, Sridhama Prakhya, Mason McGill, Aljoscha Nern, Kazunori Shinomiya, Shin-ya Takemura, Eyal Gruntman, Jakob H. Macke, Srinivas C. Turaga* (**Tübingen / Janelia / Stanford**).
 
-+ **KCNet** -> *Jinyung Hong, Theodore P. Pavlic* (**Arizona State**). Single-hidden-layer network with **sparse, randomized binary weights** that mimic the high-dimensional *Kenyon Cell representation* in the fly olfactory system. Uses **straight-through gradient estimation** for dynamic weight exploration.
++ **KCNet** -> *Jinyung Hong, Theodore P. Pavlic* (**Arizona State**).
 
-+ **Eon Systems embodied fly** -> *Eon Systems team* (building on *Shiu et al.* + *Lappalainen et al.* + *NeuroMechFly*). Full whole-brain **LIF model** coupled to a biomechanical body in simulation; the first case of a **connectome-derived brain driving a virtual embodied organism**.
++ **Eon Systems embodied fly** -> *Eon Systems team* (building on *Shiu et al.* + *Lappalainen et al.* + *NeuroMechFly*). 
 
 Also important to mention that my idea of connecting spectral graph neural networks (GNN) with mixture of experts (MoE) GNNs is already formalised as MORGAN (**M**ixture **o**f **R**outed **G**r**a**ph **N**etworks) by Lihui Liu and Yuchen Yan, published at AAAI 2026. Huge thanks to this work. Additionally, I will be implementing my own contributions onto this design.
 
@@ -40,7 +40,7 @@ $$cos(ωt + φ) · e^(αt)$$
 
 Off course we are working with a graph of a fly's brain, so the build starts off with a directed graph **G** for **G** **=** **(V,E)**. Now **V** is the set of neurons in the brain and **E** is the set of synaptic connections in said neurons. 
 
-The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert* happens I need to carve out a piece that's small enough to actually train on and still meaningful as a computation. My crappy dl380p cannot handle all that. First constraint done...
+The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert* happens I need to carve out a piece that's small enough to actually train on and still meaningful as a computation. My crappy dl380p cant handle all that. First constraint done...
 
 ## 1.
 
@@ -51,7 +51,7 @@ I think the feeding circuit will be the best to test. **Shiu et al** showed this
 
 To be honest I only expected a few thousand neurons at **k = 2**. Well I got 5,516, which blew past my 5,000 cap. I decided to keep the taste neurons and MN9 no matter what, then prefer neurons on shorter "taste-to-MN9 paths", break ties by total synaptic strength.
 
-So the final circuit is 5,000 neurons, 548,286 edges, 40.1% inhibitory. Median out-degree 93, median in-degree 85. Roughly bell shaped on a log axis, with in-degree having the fatter low-degree tail. All five gate checks passed (size in range, all 88 taste neurons present, both MN9 neurons present, a directed path from taste to each MN9, no isolated neurons). Run: `runs/r1_subcircuit/20260929-113520.`
+So the final circuit is 5,000 neurons, 548,286 edges, 40.1% inhibitory. Median out-degree 93, median in-degree 85. Roughly bell shaped on a log axis, with in-degree having the fatter low-degree tail. All five checks passed (size in range, all 88 taste neurons present, both MN9 neurons present, a directed path from taste to each MN9 and no isolated neurons). `runs/r1_subcircuit/20260929-113520`
 
 Cool. I have a graph.
 
@@ -77,7 +77,7 @@ Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 
 
 The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-trial dataset took about 1.9 hours. The Brian2 reference took 1793 s with 30 processes.
 
-Gate passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). Run: `runs/r2_teacher_validation/20260929-130111`.
+We passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). `runs/r2_teacher_validation/20260929-130111`.
 
 **PLEASE READ!!!!**
 
@@ -118,7 +118,7 @@ Why try magnetic at all? 40,566 of 76,672 reciprocal connections have opposite s
 
 The localization figure (log2 of a band's mean energy in a hop group, versus a mode spread evenly over all neurons) says less than I hoped :( . Most neurons are two hops from the taste neurons (4,309 of 5,000) and two hops from MN9 (4,648 of 5,000)... for those the enrichment is within ±0.02 in every band... the bulk of the circuit is unremarkable. All the action is in the small groups. Taste neurons themselves (88) are enriched in band 3 and depleted in band 1. Near MN9, the outer bands (1 and 4) put about 2× the uniform energy on the 2 MN9 neurons themselves, while the two middle bands nearly avoid them (6-7× below uniform). But that's two specific neurons, and I'm not generalizing it to "output neurons" or anything broader...
 
-Gate passed (both eigenvalue ranges inside [0, 2], both orthonormal). Run: `runs/r3_spectrum/20260929-185738`.
+We passed (both eigenvalue ranges inside [0, 2], both orthonormal). `runs/r3_spectrum/20260929-185738`
 
 ## 5.
 
@@ -132,7 +132,7 @@ Alright. 5 models with same data, split and loss
 + `chebgru`: Chebyshev graph convolution feeding a GRU.
 + `moe_single` and `moe_linear`: spectral mixture-of-experts variants using the magnetic basis from Step 4 above.
 
-Three seeds each. The gate: the per-neuron-mean floor must score below 0.8 normalised R², otherwise a trivial predictor already lives at the ceiling and everything downstream is meaningless.
+Three seeds each. The check... the per-neuron-mean floor must score below 0.8 normalised R², otherwise a trivial predictor already lives at the ceiling and everything downstream is meaningless.
 
 **Normalised R² on held-out stimuli (3 seeds each):**
 
@@ -166,7 +166,7 @@ The parameter counts are the story behind the table. The MLP has 27.5 million. T
 
 Honestly, almost every graph model hit the 40-epoch cap and was still improving. Best epoch 39 or 40 of 40 for all three moe_linear and all three moe_single seeds and for chebgru seeds 0 and 1. The MLP converged (best epochs 34/33/31). The 40-epoch cap is a compute trim of mine. So "this architecture underperforms an MLP" is currently tied to "this architecture was undertrained". Paired comparisons among the models remain valid since every model got the same budget... the absolute conclusion is not.
 
-The gate passed... the mean predictor scores 0.145, well under 0.8, so the task discriminates between models. Run: `runs/p2_r4_baselines/20260930-185745`.
+The check passed... the mean predictor scores 0.145, well under 0.8, so the task discriminates between models. `runs/p2_r4_baselines/20260930-185745`
 
 Learning rate detour... because it was a real decision. The first pilot (3 rates, 6 epochs, 300 conditions) picked 3e-3 for every family by final val loss. That's the edge of the grid, and val loss and normalised R² disagreed about the best rate. So I killed the sweep and ran an extended pilot (5 rates, 15 epochs). The two criteria then agreed and chose 3e-2 for the MoE and chebgru families. I overrode that to 1e-2... 3e-2 was again the grid edge, the gain over 1e-2 was marginal, the MLP collapsed at 3e-2, then the real runs take ~7× more steps at the peak rate than the pilot. I traded a few percent of val loss for safety. The MLP kept its own interior optimum of 3e-3.
 
@@ -201,7 +201,7 @@ The mean predictor scores identically under both masks (0.14491 to five figures)
 
 Under `all_observed`, every graph model stopped at best epoch 38, 39 or 40 out of 40, in every seed, with early-stopping patience never firing, while the MLP converged at 30 to 34. The budget binds the architectures I am testing and does not bind the one they are losing to.
 
-Run: `runs/p2_baselines_all_observed/20261002-143604`
+`runs/p2_baselines_all_observed/20261002-143604`
 
 ## 6.
 
@@ -210,7 +210,7 @@ Run: `runs/p2_baselines_all_observed/20261002-143604`
 
 This step is what the whole project was built for. My 4 dampedwave experts, one per frequency band, an input-dependent router, two layers with a nonlinearity between them. This is getting exciting!
 
-Two questions I have. Gated by the rule I place before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign.
+Two questions I have. Checked by the rule I place before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign.
 
 + Rule 1 (non-collapse): does moe_full beat moe_linear? If not, the architecture is an expensive linear filter.
 + Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
@@ -225,7 +225,7 @@ Two questions I have. Gated by the rule I place before seeing any of it... a dif
 
 **Results of Rule 1:**
 
-The full model beat its linear ablation in all three seeds (never worse) and still cannot claim it, because seed 1 came in at -0.48 while seed 0 came in at -2.95... and that spread swallows it. The honest read is "suggestive and underpowered at three seeds" and not "no effect." The rule is there precisely so I cannot talk myself past it after the fact. So no claim.
+The full model beat its linear ablation in all three seeds (never worse) and still cannot claim it, because seed 1 came in at -0.48 while seed 0 came in at -2.95... and that spread swallows it. The interpretation I think is "suggestive and underpowered at three seeds" not "no effect". The rule is there precisely so I cannot hype myself past it after the fact. I have no claim.
 
 **Results of Rule 2:**
 
@@ -247,7 +247,7 @@ So at max, the router learned a stimulus-present/absent detector...but mostly le
 
 AND the thing that overshadows both... the headline model scores -1.59 mean normalised R² against a mean-predictor floor of 0.145, while stopping at best epoch 38/39/40 of 40 with patience never firing. I am not going to interpret "the spectral MoE loses to predicting each neuron's average" until I know what the epoch cap cost.
 
-Run: `runs/p2_r5_moe/20261003-124145`.
+`runs/p2_r5_moe/20261003-124145`
 
 I suppose what is next is the control that decides whether any of this is about the fly. A rewired connectome with identical degrees and signs. A direction-blind symmetric basis, both retrained from scratch. If the graph models do just as well on a rewired graph, then the connectome structure isn't doing the work. If they don't, then maybe there's something there. This will hopefully work or at least bring me some useful info.
 
@@ -297,7 +297,7 @@ Does the connectome matter? Yeah. The specific wiring of this circuit carries si
 
 figures/r6_knockouts
 
-Switching bands 2, 3 and 4 off changes the predictions by exactly zero!? The three flat lines sit on top of each other at 0.000, which is why they are dashed. Not a rounding problem... Step 5's gate collapse showing up as mechanism. In seed 0 the router sends all its weight to band 1 in both layers. The three of the four experts aren't even underused...but inert. A quarter of the architecture is doing all of the work and the rest is what I can only describe as fancy decoration.
+Switching bands 2, 3 and 4 off changes the predictions by exactly zero!? The three flat lines sit on top of each other at 0.000, which is why they are dashed. Not a rounding problem... Step 5's check collapse showing up as mechanism. In seed 0 the router sends all its weight to band 1 in both layers. The three of the four experts aren't even underused...but inert. A quarter of the architecture is doing all of the work and the rest is what I can only describe as fancy decoration.
 
 Additionally... band 1, the ONE live expert, has a negative knockout effect at one hop from the input. -2.05. Deleting the only working expert improves predictions for the 194 neurons one hop downstream of the taste neurons. At the input layer it is slightly helpful (+0.02 over 88 neurons) and two hops out it is a little harmful (-0.13 over 564 neurons). In conclusion the model's learned dynamics are... on the population that should be easiest to predict... worse than outputting nothing at all. Wow. This is awful.
 
@@ -305,4 +305,4 @@ OK this is what I think is going on...Part 5 concluded the router never learned 
 
 **Conclusions conclusions...** Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
 
-Run: `runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/12_r6_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
+`runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/12_r6_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
