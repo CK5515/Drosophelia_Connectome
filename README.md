@@ -338,4 +338,4 @@ Here's what I know in the end. _BTW Every nr is traceable to a run folder in doc
 
 In the end the connectome matters. That I know. The spectral MoE, _as I built it_, is a different story. The router never had anything to route. I do not reject spectral MoE by principle... just spectral MoE on this task, stimulus space, scale and budget. These variables. I built a bad task and I admit it. Maybe a part 2 will be due or someone else can continue my work.
 
-...and I'll still be here. Probably still waiting on those damned SWAEV runs. 
+*...and I'll still be here. Probably still waiting on those damned SWAEV runs.*
