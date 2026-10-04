@@ -162,7 +162,7 @@ So the graph models do learn something real about which neurons respond and roug
 
 The parameter counts are the story behind the table. The MLP has 27.5 million. The graph models have 425, 323 and 2,513. The graph models are node-agnostic by design... no per-neuron parameters at all, one shared mechanism applied over the connectome. That's exactly what will make the held-out-neuron test and the rewiring control meaningful later... it's also exactly why they cannot memorise per-neuron responses the way the MLP can. Part of the MLP's win is memorisation of 5,000 individual response profiles. I should not read it as "the MLP found better structure."
 
-Honestly, almost every graph model hit the 40-epoch cap and was still improving. Best epoch 39 or 40 of 40 for all three moe_linear and all three moe_single seeds and for chebgru seeds 0 and 1. The MLP converged (best epochs 34/33/31). The 40-epoch cap is a compute trim of mine. So "this architecture underperforms an MLP" is currently tied to "this architecture was undertrained". Paired comparisons among the models remain valid since every model got the same budget... the absolute verdict is not.
+Honestly, almost every graph model hit the 40-epoch cap and was still improving. Best epoch 39 or 40 of 40 for all three moe_linear and all three moe_single seeds and for chebgru seeds 0 and 1. The MLP converged (best epochs 34/33/31). The 40-epoch cap is a compute trim of mine. So "this architecture underperforms an MLP" is currently tied to "this architecture was undertrained". Paired comparisons among the models remain valid since every model got the same budget... the absolute conclusion is not.
 
 The gate passed... the mean predictor scores 0.145, well under 0.8, so the task discriminates between models. Run: `runs/p2_r4_baselines/20260930-185745`.
 
@@ -214,7 +214,7 @@ Two questions I have. Scored by the rule I fixed before seeing any of it... a di
 + Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
 
 
-|comparison|	per-seed difference|	mean	|2 × std	|all same sign?	|verdict|
+|comparison|	per-seed difference|	mean	|2 × std	|all same sign?	|conclusion|
 |---|---|---|---|---|---|
 |full - linear|	+0.61 / +3.17 / +2.37|	2.046|	2.616	|yes	|no claim|
 |full - single|	-0.50 / +1.84 / +0.86|	0.730|	2.348	|no	|no claim|
@@ -241,6 +241,87 @@ So at max, the router learned a stimulus-present/absent detector...but mostly le
 
 **Rule 2 (do experts specialise in timescale?)** PASS: 2 of 3 seeds at 2.11× and 9.48×, with the caveat above on how the 9.48 is measured.
 
+
+
 AND the thing that overshadows both... the headline model scores -1.59 mean normalised R² against a mean-predictor floor of 0.145, while stopping at best epoch 38/39/40 of 40 with patience never firing. I am not going to interpret "the spectral MoE loses to predicting each neuron's average" until I know what the epoch cap cost.
 
 Run: `runs/p2_r5_moe/20261003-124145`.
+
+## Pause 
+
+*What did I learn?*
+<hr/>
+
++ The graph-free MLP wins, but that's not the whole truth. The graph models are node-agnostic (hundreds of parameters, not millions) and they capture population structure (pooled R² above the floor) even when per-neuron detail is bad. The MLP's win is partly memorisation of 5,000 individual response profiles. The interesting comparison is the held-out-neuron test, which the MLP can't even take at all.
+
++ The loss mask mattered a lot. Training on silent neurons helped every graph model by a lot. "Stay quiet" is most of what this circuit does, and a model that is never asked to learn it spends its capacity badly. I was wrong about this, thankfully the A/B caught it.
+
++ The router didn't route. The gate is input-independent in every seed. With four near-identical experts and a five-dimensional static stimulus, there was nothing for it to do. That's the task I built, not the MoE. My mistake.
+
++ The experts kinda did specialise. Two of three seeds cleared 2× timescale ratio, one of them cleanly, one with a measurement caveat that points the wrong way. The experts are not identical, which is something I suppose.
+
++ The epoch cap is still tied with everything. Every graph model hit the 40-epoch cap and was still improving... the MLP converged. Until I price the cap with a longer single-seed probe, I'm treating the graph models absolute scores as lower bounds for now.
+
+**NEXT STEPS:** the control that decides whether any of this is about the fly. A rewired connectome with identical degrees and signs. A direction-blind symmetric basis, both retrained from scratch. If the graph models do just as well on a rewired graph, then the connectome structure isn't doing the work. If they don't, then maybe there's something there. This will hopefully work or at least bring me some useful info.
+
+## Step 7
+
+*The connectome matters*
+<hr/>
+
+OK, the control is done. Last time I said the rewiring and symmetric-basis controls would decide whether any of this is actually about the fly. They did. The answer is...a partly yes?... not in the way I expected. **I tried 2 controls and one dissection, all on the full model:**
+
++ Rewire the connectome. Shuffle the edges while keeping every neuron's in-degree, out-degree, excitatory/inhibitory counts and weight multiset exactly as they were. Rebuild the eigenbasis from scratch. Retrain. One fresh rewiring per seed, three seeds. If a graph with the same statistics but not the same structure does just as well, the structure was never the point.
+
++ Throw direction away. Swap the direction-aware magnetic Laplacian for the symmetric one, keeping the real graph. Three seeds.
+
++ Switch each frequency band off at test time on the trained seed-0 model and see which neurons notice, grouped by how many hops they sit from the taste inputs.
+
+Well I expected the real graph to win. 53% of reciprocal connections in this subcircuit carry opposite signs and symmetrisation destroys that. I expected direction to matter for the same reason.
+
+What actually happened though...
+
+
+|arm|	normalised R² (seeds 0/1/2)|	mean	|best epoch of 40|
+|---|---|---|---|
+|real graph, magnetic|	-2.95 / -0.48 / -1.35	|-1.59|	39 / 38 / 40|
+|rewired, magnetic|	-7.67 / -4.54 / -8.94	|-7.05	|39 / 40 / 39|
+|real graph, symmetric|	-1.63 / -1.42 / -1.05	|-1.37	|39 / 40 / 40|
+
+figurer6_control png
+
+Does the connectome matter? Yeah. The specific wiring of this circuit carries signal that a degree and sign matched random graph does not. The model IS using it.
+
+**Four problems though...**
+
++ Reciprocity is not preserved by the swap procedure. So the gap says "something beyond degree and sign", not specifically "reciprocal sign structure". The control is a null for all of that at once, not a dissection of it.
+
++ Unweighted in- and out-degree are preserved exactly and weighted out-strength is preserved because weights travel with their source edge... but weighted in-strength is not.
+
++ `swaps_per_edge=10` counts attempted swaps. Ones that would make a self-loop or a duplicate edge are skipped. So the realised displacement is the number that matters... 0.9448 / 0.9445 / 0.9444, measured on the real graph per seed.
+
++ A fresh rewiring is drawn per seed, so the three rewired runs differ in both initialisation and graph. This is intentional. For me one fixed rewiring would merge "this particular graph is easy" with "rewired graphs are easy".
+
++ Lastly, 1 thing I should not cover. All three arms are far below the mean-predictor floor of 0.145, which is why that dashed line is on the figure. Real beating rewired here means less bad, not good. It is still a real result... destroying the structure makes the model four to five times worse in normalised terms... but nobody should read the left-hand bar as a working model to be honest.
+
+**But does direction matter..?**
+
+This failed in a weird way. Magnetic minus symmetric is -1.31 / +0.94 / -0.29, mean -0.22 with mixed signs. No claim either way and if anything the direction-blind symmetric basis is slightly ahead (-1.37 against -1.59). I built the signed magnetic Laplacian specifically because 53% of reciprocal pairs disagree in sign and that argument predicted a gap that is just simply not there. Either the model never learned to use the phase information or at this scale the symmetrised graph retains everything the model is capable of exploiting. I cannot separate those two with the runs I have right now. Maybe this is a future test.
+
+**Now the brutal dissection :(**
+
+figures/r6_knockouts
+
+Switching bands 2, 3 and 4 off changes the predictions by exactly zero!? The three flat lines sit on top of each other at 0.000, which is why they are dashed. Not a rounding problem... Step 5's gate collapse showing up as mechanism. In seed 0 the router sends all its weight to band 1 in both layers. The three of the four experts aren't even underused...but inert. A quarter of the architecture is doing all of the work and the rest is what I can only describe as fancy decoration.
+
+Additionally... band 1, the ONE live expert, has a negative knockout effect at one hop from the input. -2.05. Deleting the only working expert improves predictions for the 194 neurons one hop downstream of the taste neurons. At the input layer it is slightly helpful (+0.02 over 88 neurons) and two hops out it is a little harmful (-0.13 over 564 neurons). In conclusion the model's learned dynamics are... on the population that should be easiest to predict... worse than outputting nothing at all. Wow. This is awful.
+
+OK this is what I think is going on...
+
+Part 5 concluded the router never learned to route. This shows the cost. With three experts inert, `moe_full` is what I can describe as a single-expert model with a wasted parameter budget. Exactly consistent with Rule 1 failing to separate it from `moe_linear` AND with `moe_single` being within noise of it. The architecture's central idea that different frequency bands want different damped kernels and a router should pick between them never even engaged on this task.
+
+**Conclusions conclusions...**
+
+Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
+
+Run: `runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/12_r6_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
