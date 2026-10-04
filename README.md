@@ -53,7 +53,7 @@ To be honest I only expected a few thousand neurons at **k = 2**. Well I got 5,5
 
 So the final circuit is 5,000 neurons, 548,286 edges, 40.1% inhibitory. Median out-degree 93, median in-degree 85. Roughly bell shaped on a log axis, with in-degree having the fatter low-degree tail. All five checks passed (size in range, all 88 taste neurons present, both MN9 neurons present, a directed path from taste to each MN9 and no isolated neurons). `runs/r1_subcircuit/20260929-113520`
 
-![Degree distributions of the carved circuit](./figures/r1_degree_distribution.png)
+![1](./figures/r1_degree_distribution.png)
 
 Cool. I have a graph.
 
@@ -77,7 +77,7 @@ First things first... does my GPU fly agree with Shiu's fly? The port had to mat
 
 Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 in both (from ~67 Hz down to 3.5/4.5 Hz at 100 Hz bitter, essentially silent at 200 Hz). Across 346 active neurons, rates correlate at r = 0.9995. Even excluding the 21 Poisson-driven sugar neurons, r = 0.9996 on the 325 neurons that only fire because of the network.
 
-![Port against Brian2, dose response and per-neuron rates](./figures/r2_teacher_validation.png)
+![2](./figures/r2_teacher_validation.png)
 
 The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-trial dataset took about 1.9 hours. The Brian2 reference took 1793 s with 30 processes.
 
@@ -116,7 +116,7 @@ Full eigendecomposition of each, then chop the spectrum into 4 bands with equal 
 
 The math says eigenvalues must be in [0, 2]. They are. But the spectrum is nowhere near touching the bounds. Symmetric μ ∈ [0.299, 1.6265], magnetic μ ∈ [0.434, 1.5412]. Orthonormality error ~5e-06 against a 1e-3 tolerance. Most modes pile up around μ = 1... the two middle bands are tiny slivers (symmetric band 2 is 0.9438 to 1.0039, band 3 is 1.0039 to 1.0627). About 3,300 of 5,000 symmetric modes (3,100 magnetic) are packed between 0.9 and 1.1.
 
-![Both spectra, with the pile-up around 1](./figures/r3_spectra.png)
+![3](./figures/r3_spectra.png)
 
 So "low frequency" here is not a smooth near zero mode. There is no eigenvalue anywhere near 0. The band 1/2 and 3/4 boundaries fall inside a dense... nearly degenerate cluster, so the middle band split is somewhat arbitrary. Nudge a boundary and different modes swap between bands 2 and 3.
 
@@ -124,7 +124,7 @@ Why try magnetic at all? 40,566 of 76,672 reciprocal connections have opposite s
 
 The localization figure (log2 of a band's mean energy in a hop group, versus a mode spread evenly over all neurons) says less than I hoped :( . Most neurons are two hops from the taste neurons (4,309 of 5,000) and two hops from MN9 (4,648 of 5,000)... for those the enrichment is within ±0.02 in every band... the bulk of the circuit is unremarkable. All the action is in the small groups. Taste neurons themselves (88) are enriched in band 3 and depleted in band 1. Near MN9, the outer bands (1 and 4) put about 2× the uniform energy on the 2 MN9 neurons themselves, while the two middle bands nearly avoid them (6-7× below uniform). But that's two specific neurons, and I'm not generalizing it to "output neurons" or anything broader...
 
-![Band energy by hop group, log2 against uniform](./figures/r3_band_localization.png)
+![4](./figures/r3_band_localization.png)
 
 We passed (both eigenvalue ranges inside [0, 2], both orthonormal). `runs/r3_spectrum/20260929-185738`
 
@@ -168,7 +168,7 @@ But this isn't the full picture in my opinion.
 
 Reading across the table... the mean is dragged far below zero...neurons that are nearly silent have tiny absolute errors but also tiny variance, so their per-neuron R² explodes negative, a handful of those swamp the average. The median neuron tells a more calm story... the graph models sit roughly level with the per-neuron mean (-0.03, -0.05, -0.18 against +0.04), while the MLP is clearly ahead at 0.37. Also pooled R², which asks whether the model captured the population structure at all, has every model above the floor (0.77 to 0.90 against 0.458).
 
-![The same baselines read four different ways](./figures/r4_baselines.png)
+![5](./figures/r4_baselines.png)
 
 So the graph models do learn something real about which neurons respond and roughly how much. What they lose is condition-by-condition, per-neuron detail... and a few near-silent neurons turn that loss into huge negative numbers. MN9, the output I care about most, shows the same ordering. Trace R² for the two MN9 neurons is mlp 0.83/0.75, chebgru 0.66/0.59, moe_linear ~0.00, moe_single ~-0.05.
 
@@ -241,7 +241,7 @@ The full model beat its linear ablation in all three seeds (never worse) and sti
 
 It **passes**. Max timescale ratios of 1.67 / 2.11 / 9.48, so two of three seeds clear 2×. I have to read 9.48 with caution however.
 
-![What each expert learned, both layers, all three seeds](./figures/r5_expert_kernels.png)
+![6](./figures/r5_expert_kernels.png)
 
 In seed 2, layer 2, band 1 is the only expert in these runs that landed overdamped. Its reported `timescale_ms` of 7 ms is `bin_ms / γ`, which is a decay time only in the underdamped/critically damped regimes... the blue curve is visibly the slowest decaying expert, not a 7 ms one. The 7 ms also comes from a bad median... the channel γ values are `[0.22, 0.26, 0.34, 1.31, 4.26, 4.61, 6.32, 7.11]`, so the median 2.78 sits in an empty gap. And `1/median(γ)` vs `median(1/γ)` gives 9.48 vs 6.82... not quoting 9.48×.
 
@@ -287,7 +287,7 @@ What actually happened though...
 |rewired, magnetic|	-7.67 / -4.54 / -8.94	|-7.05	|39 / 40 / 39|
 |real graph, symmetric|	-1.63 / -1.42 / -1.05	|-1.37	|39 / 40 / 40|
 
-![The three control arms, bars are seed means and dots are seeds](./figures/r6_controls.png)
+![7](./figures/r6_controls.png)
 
 Does the connectome matter? Yeah. The specific wiring of this circuit carries signal that a degree and sign matched random graph does not. The model IS using it.
 
@@ -307,7 +307,7 @@ Does the connectome matter? Yeah. The specific wiring of this circuit carries si
 
 **Now the brutal dissection :(**
 
-![Switching each band off, seed 0](./figures/r6_knockouts.png)
+![8](./figures/r6_knockouts.png)
 
 Switching bands 2, 3 and 4 off moves the predictions by somewhere between 5e-10 and 2.4e-7!? That is float noise. The three flat lines sit on top of each other at zero, which is why I had to dash them to see them at all. This is Part 6's check collapse showing up as mechanism. In seed 0 the router sends all its weight to band 1 in both layers. The three of the four experts aren't even underused...but inert. A quarter of the architecture is doing all of the work and the rest is what I can only describe as fancy decoration.
 
@@ -326,7 +326,7 @@ OK this is what I think is going on...Part 5 concluded the router never learned 
 
 Here's what I know in the end. _BTW Every nr is traceable to a run folder in docs/plan2-results.md..._
 
-![Every model, every seed](./figures/summary_table.png)
+![9](./figures/summary_table.png)
 
 + **MoE vs ablations**... `moe_full` beat `moe_linear` in all three seeds (+0.61 / +3.17 / +2.37)... but the mean difference, 2.046, didn't clear twice the seed spread, 2.617. My commited rule 1 is not met. Against `moe_single` and `chebgru`, signs were mixed. Three seeds was too little resolution.
 
