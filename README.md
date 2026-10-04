@@ -304,9 +304,7 @@ Does the connectome matter? Yeah. The specific wiring of this circuit carries si
 
 + Lastly, 1 thing I should not cover. All three arms are far below the mean-predictor floor of 0.145, which is why that dashed line is on the figure. Real beating rewired here means less bad, not good. It is still a real result... destroying the structure makes the model four to five times worse in normalised terms... but nobody should read the left-hand bar as a working model to be honest.
 
-**But does direction matter..?**
-
-This failed in a weird way. Magnetic minus symmetric is -1.31 / +0.94 / -0.29, mean -0.22 with mixed signs. No claim either way and if anything the direction-blind symmetric basis is slightly ahead (-1.37 against -1.59). I built the signed magnetic Laplacian specifically because 53% of reciprocal pairs disagree in sign and that argument predicted a gap that is just simply not there. Either the model never learned to use the phase information or at this scale the symmetrised graph retains everything the model is capable of exploiting. I cannot separate those two with the runs I have right now. Maybe this is a future test.
+**But does direction matter..?**This failed in a weird way. Magnetic minus symmetric is -1.31 / +0.94 / -0.29, mean -0.22 with mixed signs. No claim either way and if anything the direction-blind symmetric basis is slightly ahead (-1.37 against -1.59). I built the signed magnetic Laplacian specifically because 53% of reciprocal pairs disagree in sign and that argument predicted a gap that is just simply not there. Either the model never learned to use the phase information or at this scale the symmetrised graph retains everything the model is capable of exploiting. I cannot separate those two with the runs I have right now. Maybe this is a future test.
 
 **Now the brutal dissection :(**
 
@@ -316,12 +314,8 @@ Switching bands 2, 3 and 4 off changes the predictions by exactly zero!? The thr
 
 Additionally... band 1, the ONE live expert, has a negative knockout effect at one hop from the input. -2.05. Deleting the only working expert improves predictions for the 194 neurons one hop downstream of the taste neurons. At the input layer it is slightly helpful (+0.02 over 88 neurons) and two hops out it is a little harmful (-0.13 over 564 neurons). In conclusion the model's learned dynamics are... on the population that should be easiest to predict... worse than outputting nothing at all. Wow. This is awful.
 
-OK this is what I think is going on...
+OK this is what I think is going on...Part 5 concluded the router never learned to route. This shows the cost. With three experts inert, `moe_full` is what I can describe as a single-expert model with a wasted parameter budget. Exactly consistent with Rule 1 failing to separate it from `moe_linear` AND with `moe_single` being within noise of it. The architecture's central idea that different frequency bands want different damped kernels and a router should pick between them never even engaged on this task.
 
-Part 5 concluded the router never learned to route. This shows the cost. With three experts inert, `moe_full` is what I can describe as a single-expert model with a wasted parameter budget. Exactly consistent with Rule 1 failing to separate it from `moe_linear` AND with `moe_single` being within noise of it. The architecture's central idea that different frequency bands want different damped kernels and a router should pick between them never even engaged on this task.
-
-**Conclusions conclusions...**
-
-Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
+**Conclusions conclusions...**Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
 
 Run: `runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/12_r6_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
