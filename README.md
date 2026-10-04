@@ -291,7 +291,7 @@ Does the connectome matter? Yeah. The specific wiring of this circuit carries si
 
 + Lastly, 1 thing I should not cover. All three arms are far below the mean-predictor floor of 0.145, which is why that dashed line is on the figure. Real beating rewired here means less bad, not good. It is still a real result... destroying the structure makes the model four to five times worse in normalised terms... but nobody should read the left-hand bar as a working model to be honest.
 
-**But does direction matter..?**This failed in a weird way. Magnetic minus symmetric is -1.31 / +0.94 / -0.29, mean -0.22 with mixed signs. No claim either way and if anything the direction-blind symmetric basis is slightly ahead (-1.37 against -1.59). I built the signed magnetic Laplacian specifically because 53% of reciprocal pairs disagree in sign and that argument predicted a gap that is just simply not there. Either the model never learned to use the phase information or at this scale the symmetrised graph retains everything the model is capable of exploiting. I cannot separate those two with the runs I have right now. Maybe this is a future test.
+**But does direction matter..?** This failed in a weird way. Magnetic minus symmetric is -1.31 / +0.94 / -0.29, mean -0.22 with mixed signs. No claim either way and if anything the direction-blind symmetric basis is slightly ahead (-1.37 against -1.59). I built the signed magnetic Laplacian specifically because 53% of reciprocal pairs disagree in sign and that argument predicted a gap that is just simply not there. Either the model never learned to use the phase information or at this scale the symmetrised graph retains everything the model is capable of exploiting. I cannot separate those two with the runs I have right now. Maybe this is a future test.
 
 **Now the brutal dissection :(**
 
@@ -303,6 +303,27 @@ Additionally... band 1, the ONE live expert, has a negative knockout effect at o
 
 OK this is what I think is going on...Part 5 concluded the router never learned to route. This shows the cost. With three experts inert, `moe_full` is what I can describe as a single-expert model with a wasted parameter budget. Exactly consistent with Rule 1 failing to separate it from `moe_linear` AND with `moe_single` being within noise of it. The architecture's central idea that different frequency bands want different damped kernels and a router should pick between them never even engaged on this task.
 
-**Conclusions conclusions...** Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
+**Conclusions conclusions conclusions...** Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good).
 
 `runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/12_r6_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
+
+## 8. A conclusion
+
+*Failure*
+<hr/>
+
+Here's what I know in the end. _BTW Every nr is traceable to a run folder in docs/plan2-results.md..._
+
+figures/summary_table png
+
++ **MoE vs ablations**... `moe_full` beat `moe_linear` in all three seeds (+0.61 / +3.17 / +2.37)... but the mean difference, 2.046, didn't clear twice the seed spread, 2.617. My commited rule 1 is not met. Against `moe_single` and `chebgru`, signs were mixed. Three seeds was too little resolution.
+
++ **Specialisation and router**... rule 2 passes only on its letter. Two seeds show a 2×+ timescale ratio... but the checked layers compare one trained expert against three frozen ones. Not really fair tbh. Seed 2’s 9.48× becomes 6.82× under an equally defensible reading. Another flaw in my rule. The router is input-independent in every seed. R6 knockouts change seed-0 predictions only at 1e-7... three of four experts are inert. The architecture’s purpose never even engaged.
+
++ **The fly connectome**... Rewiring while preserving in-degree, out-degree, sign counts and weight multiset... displacing 94.4% of edges... costs 5.46 normalised R², clearing the 3.76 threshold with the same sign in all seeds. Direction doesn't matter... magnetic and symmetric bases are within noise, with symmetric nominally ahead despite 52.9% of reciprocal pairs disagreeing in sign. This is my only win.
+
++ **Undertraining cap**... Nearly every model hit the 40epoch cap. A 120epoch probe (seed 0) gained 0.43 for three times the compute (-2.947 to -2.517), with validation loss 0.2237 -> 0.1976 and best epoch 114/120. The gap to the mean-predictor floor is 2.66. Undertraining was real, worth roughly 0.4. HOWEVER it does not explain a 2.7 shortfall. The cosine schedule stretches with the cap, so the probe measures “what a 120-epoch budget buys”. The 40-epoch flat tails are the schedule hitting zero. The probe is one seed, the worst of three.
+
+In the end the connectome matters. That I know. The spectral MoE, _as I built it_, is a different story. The router never had anything to route. I do not reject spectral MoE by principle... just spectral MoE on this task, stimulus space, scale and budget. These variables. I built a bad task and I admit it. Maybe a part 2 will be due or someone else can continue my work.
+
+...and I'll still be here. Probably still waiting on those damned SWAEV runs. 
