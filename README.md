@@ -1,6 +1,6 @@
 # Do Fly Brains *actually* think in MORGAN style spectral MoE??? Probably not, but here is what I did find...
 ![Fly Connectome Render](./Images/Connectome.png)
-### Testing whether a biologically grounded graph structure can serve useful for a model that is simultaneously efficient, interpretable, and non-linear. 
+### Testing a *biologically inspired* graph model that is efficient and interpretable. Non linear too.
 [Summary ^v^](./RESULTS.md)
 ## Why..?
 While waiting on my SWAEV AI model training runs to finish I've been scrolling and been seeing a lot of goofy projects related to mapping the fly brain to trade stock, or importing it to Minecraft and training it on those tasks. Resulting in a digital fly doing silly things. Seeing a fly play beat saber made me question what the hell is this all about? Are people using the actual biophysical neurological replica of a fly brain and forcing it to learn these novel tasks... or maybe the answer is more simpler. I have found that for most of these project it is in fact more boring than it seems :(
@@ -30,9 +30,9 @@ So the source of it all is the FlyWire connectome. It is essentially a complete 
 
 MoE design is the non-negotiable for me... I mean it's an absolute fact that different parts of our brains specialise in certain actions.
 
-+ MoE LLMs have been seen to be lightweight in inference and also have superb performance. For a biology inspired NN this makes sense. 
++ MoE LLMs HAVE been proven to be lightweight in inference and also have superb performance. Stuff like some the Qwen models... For a biology inspired NN this makes sense I think. 
 
-+ MORGAN decomposes a graph onto an MoE framework and partitions the graph spectrum into frequency bands and assigns a specialized "expert" network to each band. A gating function then dynamically combines these experts based on the input's spectral characteristics (how the graph was broken down aka laplacian eigenvalues). 
++ MORGAN splits a graph onto an MoE framework and parts the graph spectrum into frequency bands. It assigns a specialized "expert" network to each band. A gating function then dynamically combines these experts based on the input's spectral characteristics (so how the graph was broken down aka laplacian eigenvalues). 
 
 Additionally I will be adding cosine dampening to the architecture. The fly brain is a dynamical system. "Neural circuits exhibit oscillatory activity". A damped cosine kernel is a more faithful mathematical description of these biological processes than an MLP. I am also adding it because I can. It's a gap in this space of research and adding the dimension of temporal time dynamics is cool.
 
@@ -206,9 +206,9 @@ Run: `runs/p2_baselines_all_observed/20261002-143604`
 *The MoE Level*
 <hr/>
 
-This is what the whole project was built for. Four dampedwave experts, one per frequency band, an input-dependent router, two layers with a nonlinearity between them. 
+This step is what the whole project was built for. My 4 dampedwave experts, one per frequency band, an input-dependent router, two layers with a nonlinearity between them. This is getting exciting!
 
-Two questions I have. Scored by the rule I fixed before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign.
+Two questions I have. Gated by the rule I place before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign.
 
 + Rule 1 (non-collapse): does moe_full beat moe_linear? If not, the architecture is an expensive linear filter.
 + Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
@@ -252,11 +252,11 @@ Run: `runs/p2_r5_moe/20261003-124145`.
 *What did I learn?*
 <hr/>
 
-+ The graph-free MLP wins, but that's not the whole truth. The graph models are node-agnostic (hundreds of parameters, not millions) and they capture population structure (pooled R² above the floor) even when per-neuron detail is bad. The MLP's win is partly memorisation of 5,000 individual response profiles. The interesting comparison is the held-out-neuron test, which the MLP can't even take at all.
++ The graph-free MLP wins... although that's not the whole truth. The graph models are node-agnostic (only hundreds of parameters, not millions!) and they capture population structure (pooled R² above the floor) even when per-neuron detail is bad. The MLP's win is partly memorisation of 5,000 individual response profiles. The interesting comparison is the held-out-neuron test, which the MLP can't even take at all.
 
-+ The loss mask mattered a lot. Training on silent neurons helped every graph model by a lot. "Stay quiet" is most of what this circuit does, and a model that is never asked to learn it spends its capacity badly. I was wrong about this, thankfully the A/B caught it.
++ The loss mask mattered a good bit. Training on silent neurons helped every graph model by a lot. Staying quiet is most of what this circuit does and a model that is never asked to learn it spends its capacity badly. I was wrong about this, thankfully the A/B caught it.
 
-+ The router didn't route. The gate is input-independent in every seed. With four near-identical experts and a five-dimensional static stimulus, there was nothing for it to do. That's the task I built, not the MoE. My mistake.
++ The router didn't route. The gate is input-independent in every seed. With four near-identical experts and a five-dimensional static stimulus... there was really nothing for it to do. That's the task I built, not the MoE. My mistake.
 
 + The experts kinda did specialise. Two of three seeds cleared 2× timescale ratio, one of them cleanly, one with a measurement caveat that points the wrong way. The experts are not identical, which is something I suppose.
 
