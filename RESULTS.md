@@ -8,6 +8,4 @@ NOT evidence that fly brains use MORGAN-style spectral MoE. I guess its not rigo
 
 I know the main section is too long so for those who just want facts this is it
 
-(PS... TLDR stands for "too long, didnt read")
-
 THX for reading ;P
