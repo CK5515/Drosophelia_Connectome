@@ -68,12 +68,7 @@ First things first... does my GPU fly agree with Shiu's fly? The port had to mat
 
 **The MN9 dose-response numbers (port vs Brian2, mean ± 2 SE):**
 
-| sugar (Hz) | port |	Brian2|
-|---|---|---|
-| 50	| 19.8 ± 2.4 |	19.5 ± 2.2 |
-| 100	| 67.7 ± 1.7 |	67.8 ± 1.2 |
-| 150	| 83.0 ± 2.0 |	84.4 ± 1.6 |
-| 200	| 92.6 ± 1.4 |	90.6 ± 2.2|
+![1](./Images/first.jpg)
 
 Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 in both (from ~67 Hz down to 3.5/4.5 Hz at 100 Hz bitter, essentially silent at 200 Hz). Across 346 active neurons, rates correlate at r = 0.9995. Even excluding the 21 Poisson-driven sugar neurons, r = 0.9996 on the 325 neurons that only fire because of the network.
 
@@ -144,27 +139,14 @@ Three seeds each. The check... the per-neuron-mean floor must score below 0.8 no
 
 **Normalised R² on held-out stimuli (3 seeds each):**
 
-|model	|normalised R²	|parameters|
-|---|---|---|
-|`mean` (floor)	|0.145	|0|
-|`mlp`|	0.797 / 0.857 / 0.764	|27,506,028|
-|`chebgru`|	-2.62 / -1.84 / -4.22	|2,513|
-|`moe_single`|	-5.88 / -6.46 / -5.96	|323|
-|`moe_linear`|	-10.83 / -10.86 / -10.96	|425|
+![2](./Images/second.jpg)
 
 The graph-free MLP beats every graph model. On the normalised statistic, the graph models are not just worse than the MLP but far worse than predicting each neuron's mean...
 
 But this isn't the full picture in my opinion. 
 **Here's the fuller picture (seed 0, observed-active neurons, held-out stimuli):**
 
-
-|model	|normalised	|per-neuron mean	|per-neuron median|	pooled|
-|---|---|---|---|---|
-|`mean`	|0.145|	0.105|	0.036|	0.458|
-|`mlp`	|0.797|	0.437|	0.371|	0.903|
-|`chebgru`	|-2.62|	-0.437|	-0.033|	0.868|
-|`moe_single`	|-5.88|	-1.511|	-0.046|	0.807|
-|`moe_linear`	|-10.83|	-3.015|	-0.179|	0.768|
+![3](./Images/third.jpg)
 
 Reading across the table... the mean is dragged far below zero...neurons that are nearly silent have tiny absolute errors but also tiny variance, so their per-neuron R² explodes negative, a handful of those swamp the average. The median neuron tells a more calm story... the graph models sit roughly level with the per-neuron mean (-0.03, -0.05, -0.18 against +0.04), while the MLP is clearly ahead at 0.37. Also pooled R², which asks whether the model captured the population structure at all, has every model above the floor (0.77 to 0.90 against 0.458).
 
@@ -187,25 +169,13 @@ Learning rate detour... because it was a real decision. The first pilot (3 rates
 
 Step 4's runs trained on `ever_active`... the 1,062 neurons that spike at least once somewhere in the dataset. The alternative, `all_observed`, trains on all 4,018 observed neurons including the ones that are silent throughout. I had assumed the silent neurons would flatten the signal and make training worse. **So I ran a two-arm A/B on moe_full, three seeds each:**
 
-
-|loss mask|	neurons in the loss|	normalised R² (seeds 0/1/2)|	mean|
-|---|---|---|---|
-|`ever_active`|	1,062|	-7.98 / -5.80 / -7.29	|-7.02|
-|`all_observed`|	4,018|	-2.95 / -0.48 / -1.35	|-1.59|
+![4](./Images/fourth.jpg)
 
 A difference of 5.43 against a pooled seed spread of 1.68. My assumption was wrong... by a lot! Training on the silent neurons helps a great deal. I assume it is because "stay quiet" is most of what this circuit does. I guess a model that is never asked to learn it spends its capacity badly.
 
 **So I ran it back, the whole baseline set under `all_observed` now (12 runs, 21 h 54 m):**
 
-
-|model|	`ever_active` (old)|	`all_observed` (new)|	best epoch of 40|
-|---|---|---|---|
-|`mean` (floor)|	0.145|	0.145	| N/A|
-|`mlp`|	0.797 / 0.857 / 0.764|	0.852 / 0.855 / 0.828|	34 / 33 / 30|
-|`chebgru`|	-2.62 / -1.84 / -4.22|	-1.49 / -1.17 / -1.53	|40 / 40 / 40|
-|`moe_single`|	-5.88 / -6.46 / -5.96|	-2.45 / -2.32 / -2.21|	39 / 38 / 39|
-|`moe_linear`|	-10.83 / -10.86 / -10.96|	-3.56 / -3.65 / -3.71	|39 / 39 / 40|
-|`moe_full`|	-7.98 / -5.80 / -7.29|	-2.95 / -0.48 / -1.35	|39 / 38 / 40|
+![5](./Images/fifth.jpg)
 
 The mean predictor scores identically under both masks (0.14491 to five figures). This is the check I wanted. Every graph model improved very nicely and chebgru's seed-2 instability vanished... its three seeds now sit in a 0.36-wide band instead of a 2.4-wide one. The ordering did not change at all. The MLP still wins... every graph model is still far below the mean-predictor floor. A better loss mask made the graph models much less bad without making them good.
 
@@ -225,13 +195,7 @@ Two questions I have. Checked by the rule I place before seeing any of it... a d
 + Rule 1 (non-collapse): does moe_full beat moe_linear? If not, the architecture is an expensive linear filter.
 + Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
 
-
-|comparison|	per-seed difference|	mean	|2 × std	|all same sign?	|conclusion|
-|---|---|---|---|---|---|
-|full - linear|	+0.61 / +3.17 / +2.37|	2.046|	2.616	|yes	|no claim|
-|full - single|	-0.50 / +1.84 / +0.86|	0.730|	2.348	|no	|no claim|
-|full - chebgru|	-1.45 / +0.69 / +0.19|	-0.192|	2.242	|no	|no claim|
-|full - mlp|	-3.80 / -1.33 / -2.18|	-2.437|	2.505	|yes	|no claim|
+![6](./Images/sixth.jpg)
 
 **Results of Rule 1:**
 
@@ -281,11 +245,7 @@ Well I expected the real graph to win. 53% of reciprocal connections in this sub
 What actually happened though...
 
 
-|arm|	normalised R² (seeds 0/1/2)|	mean	|best epoch of 40|
-|---|---|---|---|
-|real graph, magnetic|	-2.95 / -0.48 / -1.35	|-1.59|	39 / 38 / 40|
-|rewired, magnetic|	-7.67 / -4.54 / -8.94	|-7.05	|39 / 40 / 39|
-|real graph, symmetric|	-1.63 / -1.42 / -1.05	|-1.37	|39 / 40 / 40|
+![7](./Images/seventh.jpg)
 
 ![7](./figures/r6_controls.png)
 
@@ -338,4 +298,4 @@ Here's what I know in the end. _BTW Every nr is traceable to a run folder in doc
 
 In the end the connectome matters. That I know. The spectral MoE, _as I built it_, is a different story. The router never had anything to route. I do not reject spectral MoE by principle... just spectral MoE on this task, stimulus space, scale and budget. These variables. I built a bad task and I admit it. Maybe a part 2 will be due or someone else can continue my work.
 
-*...and I'll still be here. Probably still waiting on those damned SWAEV runs.*
+*...and I'll still be here. Prolly still waiting on those damned SWAEV runs.*
