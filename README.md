@@ -284,7 +284,7 @@ OK this is what I think is going on...Part 5 concluded the router never learned 
 *Failure*
 <hr/>
 
-Here's what I know in the end. _BTW Every nr is traceable to a run folder in docs/plan2-results.md..._
+Here's what I know in the end. 
 
 ![9](./figures/summary_table.png)
 
