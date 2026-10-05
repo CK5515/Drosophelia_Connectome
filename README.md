@@ -220,7 +220,7 @@ Under `all_observed`, every graph model stopped at best epoch 38, 39 or 40 out o
 
 This step is what the whole project was built for. My 4 dampedwave experts, one per frequency band, an input-dependent router, two layers with a nonlinearity between them. This is getting exciting!
 
-Two questions I have. Checked by the rule I place before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign.
+Two questions I have. Checked by the rule I place before seeing any of it... a difference counts only if the mean paired difference across seeds beats twice the seed-to-seed spread and every seed agrees on the sign. Gotta make Rules to check my hypothesising. This da real science.
 
 + Rule 1 (non-collapse): does moe_full beat moe_linear? If not, the architecture is an expensive linear filter.
 + Rule 2 (specialisation): in at least 2 of 3 seeds, do two experts in some layer have channel-median timescales differing by 2× or more?
