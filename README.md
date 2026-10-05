@@ -215,6 +215,8 @@ Everything else is normal... 30-81 ms, underdamped, settling within 400 ms... pe
 
 **The router is the negative finding...**
 
+![Where the router sends its weight, per seed and per layer](./figures/r5_gates.png)
+
 So at max, the router learned a stimulus-present/absent detector...but mostly learned nothing. I don't think this is a bug (pun intended!) and I guess I had a hint istarting out... the stimulus space is five-dimensional (five taste channels), the conditions are static steps and the experts all converged on similar kinematics anyway. A router with four near-identical things to route between, locked on five numbers, has very little to do. This is the task I built... nothing about mixtures of experts. My bad.
 
 **Rule 1 (does it avoid collapsing to linear?)** NAH: +0.61/+3.17/+2.37, mean 2.046 against a 2σ threshold of 2.616. Positive in every seed, not separable from seed noise.
@@ -273,11 +275,11 @@ Switching bands 2, 3 and 4 off moves the predictions by somewhere between 5e-10 
 
 Band 1... the only live expert... has mean knockout effect -2.05 at one hop from the input, which first looked like deleting the only working expert improves predictions. However the median there is +0.199. Nearly walked into the Part 5 trap... a few near-silent, low-variance neurons produce huge negative per-neuron R², dragging the mean below zero while the typical neuron is fine. Band 1 helps the median neuron at every hop (+0.025, +0.199, +0.045)... most neurons a little, a small tail destroyed at one hop. Highkey embarrassing to catch in my own analysis after writing that warning. Counts 88 / 194 / 564 are observed-active neurons at each hop (summing to the 846 scored)... the circuit has 88 / 603 / 4,309 neurons at those distances.
 
-OK this is what I think is going on...Part 5 concluded the router never learned to route. This shows the cost. With three experts inert, `moe_full` is what I can describe as a single-expert model with a wasted parameter budget. Exactly consistent with Rule 1 failing to separate it from `moe_linear` AND with `moe_single` being within noise of it. The architecture's central idea that different frequency bands want different damped kernels and a router should pick between them never even engaged on this task.
+OK this is what I think is going on...Part 6 concluded the router never learned to route. This shows the cost. With three experts inert, `moe_full` is what I can describe as a single-expert model with a wasted parameter budget. Exactly consistent with Rule 1 failing to separate it from `moe_linear` AND with `moe_single` being within noise of it. The architecture's central idea that different frequency bands want different damped kernels and a router should pick between them never even engaged on this task.
 
 **Conclusions conclusions conclusions...** Connectome matters (5.46 against 3.76). Direction doesn't (-0.22, mixed signs). Band specialisation is not used at inference (3 out of 4 are useless up to no good). Seed 2's second layer does spread across all four. Not true for every seed? 
 
-`runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/12_r6_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
+`runs/p2_r6_controls/20261003-130247` rewiring in `runs/p2_rewired/20261003-124855`. Both figures were redrawn from the saved metrics with `scripts/part7_controls.py --replot`... no retraining. The controls figure gained the floor line. The knockout figure gained a zero line and per-band line styles. The 3 inert experts would be invisible underneath one another so yeah.
 
 ## 8. A conclusion
 
