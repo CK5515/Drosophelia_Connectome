@@ -26,7 +26,7 @@ Also important to mention that my idea of connecting spectral graph neural netwo
 ## My approach.
 So the source of it all is the FlyWire connectome. It is essentially a complete wiring diagram of an adult Drosophila brain (YAY I worked on fruitfly dna before!). Entailing "roughly 140,000 neurons and 50 million synaptic connections". Neurons as nodes and synaptic connections just refers to the wires between these nodes. 
 
-*Now that I have done the due diligence of prerequisite research, Time to start applying my domain.*
+*Now that I have done the due diligence of prerequisite research. Time to start applying my domain.*
 
 MoE design is the non-negotiable for me... I mean it's an absolute fact that different parts of our brains specialise in certain actions.
 
@@ -38,7 +38,7 @@ Additionally I will be adding cosine dampening to the architecture. The fly brai
 
 $$cos(ωt + φ) · e^(αt)$$
 
-Off course we are working with a graph of a fly's brain, so the build starts off with a directed graph **G** for **G** **=** **(V,E)**. Now **V** is the set of neurons in the brain and **E** is the set of synaptic connections in said neurons. 
+Off course we are working with a graph of a fly's brain, so the build starts off with a directed graph **G** for **G** **=** **(V,E)**. Now **V** is the set of neurons in the brain and **E** is the set of synaptic connections in said neurons. [Click for more messy math!](./Images/scan.pdf)
 
 The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert* happens I need to carve out a piece that's small enough to actually train on and still meaningful as a computation. My crappy dl380p cant handle all that. First constraint done...
 
@@ -47,9 +47,9 @@ The FlyWire connectome is a lot of graph. Before anything *spectral* or *expert*
 *A circuit and not the whole brain...*
 <hr/>
 
-I think the feeding circuit will be the best to test. **Shiu et al** showed this thing predicts the "proboscis extension". The MN9 motor neuron was something I will keep no matter what. So I kept neurons that sit on short paths from the taste neurons (sugar, bitter, water, Ir94e; 88 total) to MN9. "Short" meaning within **k** hops downstream of a taste neuron and within **k** hops upstream of MN9. Just wiring... the teacher can't leak into the structure. OK.
+I think the feeding circuit will be the best to test. **Shiu et al** showed this thing predicts the "proboscis extension". The MN9 motor neuron was something I will keep no matter what. So I kept neurons that sit on short paths from the taste neurons (sugar, bitter, water, Ir94e... 88 total) to MN9. "Short" meaning within **k** hops downstream of a taste neuron and within **k** hops upstream of MN9. Just wiring... the teacher can't leak into the structure. OK.
 
-To be honest I only expected a few thousand neurons at **k = 2**. Well I got 5,516, which blew past my 5,000 cap. I decided to keep the taste neurons and MN9 no matter what, then prefer neurons on shorter "taste-to-MN9 paths", break ties by total synaptic strength.
+TBH I only expected a few thousand neurons at **k = 2**. Well I got 5,516, which blew past my 5,000 cap. I decided to keep the taste neurons and MN9 no matter what, then prefer neurons on shorter "taste-to-MN9 paths", break ties by total synaptic strength.
 
 So the final circuit is 5,000 neurons, 548,286 edges, 40.1% inhibitory. Median out-degree 93, median in-degree 85. Roughly bell shaped on a log axis, with in-degree having the fatter low-degree tail. All five checks passed (size in range, all 88 taste neurons present, both MN9 neurons present, a directed path from taste to each MN9 and no isolated neurons). `runs/r1_subcircuit/20260929-113520`
 
@@ -64,7 +64,7 @@ Cool. I have a graph.
 
 Shiu's model is a leaky integrate-and-fire spiking network written in Brian2. It runs on CPU. Pointless for generating 12,000 trials of training data. So I rewrote the whole thing in PyTorch to run batched on a 3060
 
-First things first... does my GPU fly agree with Shiu's fly? The port had to match Brian2 spike-for-spike on a 50-neuron toy network first (it did), and then I ran the original Brian2 code side by side with my port on the whole 127,400-neuron brain: sugar neurons at 50-200 Hz, and sugar at 100 Hz with bitter at 0-200 Hz, 30 trials each.
+First things first... does my GPU fly agree with Shiu's fly? The port had to match Brian2 spike-for-spike on a 50-neuron toy network first (it did), and then I ran the original Brian2 code side by side with my port on the whole 127,400-neuron brain: sugar neurons at 50-200 Hz and sugar at 100 Hz with bitter at 0-200 Hz, 30 trials each.
 
 **The MN9 dose-response numbers (port vs Brian2, mean ± 2 SE):**
 
@@ -239,7 +239,7 @@ The full model beat its linear ablation in all three seeds (never worse) and sti
 
 **Results of Rule 2:**
 
-It **passes**. Max timescale ratios of 1.67 / 2.11 / 9.48, so two of three seeds clear 2×. I have to read 9.48 with caution however.
+It **passes**. Max timescale ratios of 1.67 / 2.11 / 9.48, so two of three seeds clear 2×. I have to read 9.48 with caution however...
 
 ![6](./figures/r5_expert_kernels.png)
 
@@ -253,9 +253,9 @@ Everything else is normal... 30-81 ms, underdamped, settling within 400 ms... pe
 
 So at max, the router learned a stimulus-present/absent detector...but mostly learned nothing. I don't think this is a bug (pun intended!) and I guess I had a hint istarting out... the stimulus space is five-dimensional (five taste channels), the conditions are static steps and the experts all converged on similar kinematics anyway. A router with four near-identical things to route between, locked on five numbers, has very little to do. This is the task I built... nothing about mixtures of experts. My bad.
 
-**Rule 1 (does it avoid collapsing to linear?)** FAIL: +0.61/+3.17/+2.37, mean 2.046 against a 2σ threshold of 2.616. Positive in every seed, not separable from seed noise.
+**Rule 1 (does it avoid collapsing to linear?)** NAH: +0.61/+3.17/+2.37, mean 2.046 against a 2σ threshold of 2.616. Positive in every seed, not separable from seed noise.
 
-**Rule 2 (do experts specialise in timescale?)** PASS: 2 of 3 seeds at 2.11× and 9.48×, with the problem of how I measured it.
+**Rule 2 (do experts specialise in timescale?)** YEAH: 2 of 3 seeds at 2.11× and 9.48×, with the problem of how I measured it.
 
 AND the thing that overshadows both... the headline model scores -1.59 mean normalised R² against a mean-predictor floor of 0.145, while stopping at best epoch 38/39/40 of 40 with patience never firing. I am not going to interpret "the spectral MoE loses to predicting each neuron's average" until I know what the epoch cap cost.
 
