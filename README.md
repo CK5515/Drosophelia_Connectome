@@ -79,13 +79,13 @@ Every dose is within 2 standard errors of the difference. Bitter suppresses MN9 
 
 ![2](./figures/r2_teacher_validation.png)
 
-The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-trial dataset took about 1.9 hours. The Brian2 reference took 1793 s with 30 processes.
+The port runs at 6,354 trials/hour at batch 256, so the 3000-condition × 4-trial dataset took about 1.9 hrs. The Brian2 reference took 1793 s with 30 processes.
 
 We passed on all three checks (MN9 dose response, bitter suppression, network-wide rates r > 0.9). `runs/r2_teacher_validation/20260929-130111`.
 
 **PLEASE READ!!!!**
 
-*Brian2 validation covered only the 346 neurons active under sugar at 100 Hz. Of those, at least 330 are in my 5,000-neuron circuit, against the ~1,330 circuit neurons that are ever active in the dataset. So the comparison touched roughly a quarter of the circuit's active neurons. The teacher's accuracy on the near silent majority is unvalidated. Also, the Brian2 comparison drove only sugar_R and bitter at constant drive for the full second... the dataset drives all five taste channels with a 500 ms on / 500 ms off step, supervised in 20 ms bins. The off-period and the 20 ms bin structure are validated only by the 50-neuron test, not at whole-brain scale. And sugar_L, water, and Ir94e were never compared against Brian2 at all.*
+*Brian2 validation covered only the 346 neurons active under sugar at 100 Hz. Of those, at least 330 are in my 5,000-neuron circuit, against the ~1,330 circuit neurons that are ever active in the dataset. So the comparison touched roughly a quarter of the circuit's active neurons. The teacher's accuracy on the near silent majority is unvalidated. Also, the Brian2 comparison drove only sugar_R and bitter at constant drive for the full second... the dataset drives all five taste channels with a 500 ms on / 500 ms off step, supervised in 20 ms bins. The off-period and the 20 ms bin structure are validated only by the 50-neuron test, not at whole-brain scale. And sugar_L, water and Ir94e were never compared against Brian2 at all.*
 
 *So "validated teacher" means "validated on the part of the circuit that was active under one specific stimulus".*
 
