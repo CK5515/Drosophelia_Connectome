@@ -1,0 +1,47 @@
+{
+  "r2_observed_active_mean": -10.820715419583873,
+  "r2_observed_active_median": -1.1454531129612144,
+  "pooled_r2_observed_active": 0.15671110666314858,
+  "normalised_r2_observed_active": -37.05361656370727,
+  "n_observed_active": 846,
+  "n_observed_active_ceiling_usable": 771,
+  "r2_heldout_active_mean": -12.874025281673232,
+  "r2_heldout_active_median": -3.777792574411369,
+  "pooled_r2_heldout_active": -0.015209632507881876,
+  "normalised_r2_heldout_active": -55.93847170038538,
+  "n_heldout_active": 193,
+  "n_heldout_active_ceiling_usable": 177,
+  "mn9_trace_r2": [
+    -0.05183260391618294,
+    -0.027029154558297463
+  ],
+  "history": {
+    "train_loss": [
+      0.9799433120272376
+    ],
+    "val_loss": [
+      0.8418340086936951
+    ],
+    "best_epoch": 1,
+    "stopped_early": false
+  },
+  "n_parameters": 425,
+  "n_loss_mask": 1062,
+  "n_scored_without_prediction": 0,
+  "target_std_hz": 23.237998962402344,
+  "config": {
+    "model": "moe_linear",
+    "basis": "magnetic",
+    "graph": "real",
+    "loss_mask": "ever_active",
+    "seed": 0,
+    "lr": 0.001,
+    "batch_size": 16,
+    "max_epochs": 1,
+    "patience": 1,
+    "weight_decay": 0.0001,
+    "n_conditions": null,
+    "device": "cuda",
+    "tag": "_step0"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "experiment": "p2_baselines_all_observed",
+  "timestamp": "20261002-143604",
+  "git_commit": "24d25179130fa6e39bf95f9b9c737637ed852474",
+  "config": {
+    "loss_mask": "all_observed",
+    "order": [
+      [
+        "moe_linear",
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      [
+        "moe_single",
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      [
+        "mlp",
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      [
+        "mean",
+        [
+          0
+        ]
+      ],
+      [
+        "chebgru",
+        [
+          0,
+          1,
+          2
+        ]
+      ]
+    ],
+    "learning_rates": {
+      "moe": 0.01,
+      "chebgru": 0.01,
+      "mlp": 0.003
+    },
+    "lr_source": "p2_lr.json (extended pilot with controller override: moe=0.01, chebgru=0.01)"
+  }
+}

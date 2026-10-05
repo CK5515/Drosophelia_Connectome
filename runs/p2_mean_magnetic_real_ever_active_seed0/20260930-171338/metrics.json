@@ -1,0 +1,43 @@
+{
+  "r2_observed_active_mean": 0.10527423511803488,
+  "r2_observed_active_median": 0.035789112044481985,
+  "pooled_r2_observed_active": 0.45847198049976223,
+  "normalised_r2_observed_active": 0.14491219775654213,
+  "n_observed_active": 846,
+  "n_observed_active_ceiling_usable": 771,
+  "r2_heldout_active_mean": null,
+  "r2_heldout_active_median": null,
+  "pooled_r2_heldout_active": null,
+  "normalised_r2_heldout_active": null,
+  "n_heldout_active": 193,
+  "n_heldout_active_ceiling_usable": 177,
+  "mn9_trace_r2": [
+    0.18363488470237166,
+    0.18946524199979198
+  ],
+  "history": {
+    "train_loss": [],
+    "val_loss": [],
+    "best_epoch": 0,
+    "stopped_early": false
+  },
+  "n_parameters": 0,
+  "n_loss_mask": 1062,
+  "n_scored_without_prediction": 0,
+  "target_std_hz": 23.237998962402344,
+  "config": {
+    "model": "mean",
+    "basis": "magnetic",
+    "graph": "real",
+    "loss_mask": "ever_active",
+    "seed": 0,
+    "lr": 0.003,
+    "batch_size": 16,
+    "max_epochs": 40,
+    "patience": 8,
+    "weight_decay": 0.0001,
+    "n_conditions": null,
+    "device": "cuda",
+    "tag": ""
+  }
+}

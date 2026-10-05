@@ -1,0 +1,57 @@
+{
+  "r2_observed_active_mean": 0.29015668363441594,
+  "r2_observed_active_median": 0.431967370559728,
+  "pooled_r2_observed_active": 0.7438504657603753,
+  "normalised_r2_observed_active": 0.32958749199588316,
+  "n_observed_active": 615,
+  "n_observed_active_ceiling_usable": 572,
+  "r2_heldout_active_mean": null,
+  "r2_heldout_active_median": null,
+  "pooled_r2_heldout_active": null,
+  "normalised_r2_heldout_active": null,
+  "n_heldout_active": 120,
+  "n_heldout_active_ceiling_usable": 110,
+  "mn9_trace_r2": [
+    0.6994913541918382,
+    0.598916730270578
+  ],
+  "history": {
+    "train_loss": [
+      0.7601193785667419,
+      0.4566401713772824,
+      0.36125340116651433,
+      0.28840426159532445,
+      0.24954274610469215,
+      0.2337052916225634
+    ],
+    "val_loss": [
+      0.49316892623901365,
+      0.3723794400691986,
+      0.29403334856033325,
+      0.24724438190460205,
+      0.22548362910747527,
+      0.21954263150691986
+    ],
+    "best_epoch": 6,
+    "stopped_early": false
+  },
+  "n_parameters": 26326128,
+  "n_loss_mask": 1016,
+  "n_scored_without_prediction": 120,
+  "target_std_hz": 24.14197540283203,
+  "config": {
+    "model": "mlp",
+    "basis": "magnetic",
+    "graph": "real",
+    "loss_mask": "ever_active",
+    "seed": 0,
+    "lr": 0.001,
+    "batch_size": 16,
+    "max_epochs": 6,
+    "patience": 6,
+    "weight_decay": 0.0001,
+    "n_conditions": 300,
+    "device": "cuda",
+    "tag": "_pilot"
+  }
+}

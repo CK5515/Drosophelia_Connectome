@@ -1,0 +1,11 @@
+{
+  "experiment": "r1_subcircuit",
+  "timestamp": "20260929-113520",
+  "git_commit": "58832b76fb06da6d13c3e01db81b7eb218bb63ea",
+  "config": {
+    "flywire_version": 630,
+    "min_size": 2000,
+    "max_size": 5000,
+    "max_hops": 6
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "experiment": "p2_rewired",
+  "timestamp": "20261003-124855",
+  "git_commit": "1d17a38d0917f083c4173e0a8b75e86559e53beb",
+  "config": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "swaps_per_edge": 10.0
+  }
+}

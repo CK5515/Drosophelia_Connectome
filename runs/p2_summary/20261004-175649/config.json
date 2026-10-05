@@ -1,0 +1,15 @@
+{
+  "experiment": "p2_summary",
+  "timestamp": "20261004-175649",
+  "git_commit": "85869d13bb26a19439d97c5ae5af77f884335936-dirty",
+  "config": {
+    "metric": "normalised_r2_observed_active",
+    "sources": {
+      "baselines": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_baselines_all_observed/20261002-143604",
+      "loss_mask_ab": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_loss_mask_ab/20261001-165320",
+      "r5": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_r5_moe/20261003-124145",
+      "r6": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_r6_controls/20261003-130247",
+      "epoch_cap_probe": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed0_probe120/20261004-032529"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "checks": {
+    "size_in_range": true,
+    "all_88_inputs_present": true,
+    "both_mn9_present": true,
+    "path_to_each_mn9": true,
+    "no_zero_symmetrized_degree": true
+  },
+  "pass": true,
+  "n_neurons": 5000,
+  "hops_k": 2,
+  "n_candidates_before_truncation": 5516,
+  "n_edges": 548286,
+  "frac_inhibitory_edges": 0.4014766016276177,
+  "excitatory_synapses": 1980538.0,
+  "inhibitory_synapses": 1641629.0,
+  "out_degree_median": 93.0,
+  "out_degree_max": 747,
+  "in_degree_median": 85.0,
+  "in_degree_max": 697,
+  "d_in_counts": {
+    "0": 88,
+    "1": 603,
+    "2": 4309
+  },
+  "d_out_counts": {
+    "0": 2,
+    "1": 349,
+    "2": 4648,
+    "3": 1
+  }
+}

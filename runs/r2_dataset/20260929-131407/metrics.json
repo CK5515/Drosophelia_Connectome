@@ -1,0 +1,21 @@
+{
+  "wall_seconds": 7009.679006099701,
+  "n_conditions": 3000,
+  "n_trials": 4,
+  "shape": [
+    3000,
+    4,
+    50,
+    5000
+  ],
+  "bytes": 3000000000,
+  "frac_neurons_silent": 0.7344,
+  "frac_neurons_below_1hz": 0.9044,
+  "median_neuron_rate_hz": 0.0,
+  "mn9_on_rate_hz_percentiles": {
+    "10": 0.0,
+    "50": 5.0,
+    "90": 72.5
+  },
+  "max_bin_count": 16
+}

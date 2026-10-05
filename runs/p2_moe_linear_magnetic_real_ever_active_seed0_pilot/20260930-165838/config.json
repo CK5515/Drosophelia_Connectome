@@ -1,0 +1,22 @@
+{
+  "experiment": "p2_moe_linear_magnetic_real_ever_active_seed0_pilot",
+  "timestamp": "20260930-165838",
+  "git_commit": "25383a293ae4cceab0f023e8e9352b4f613b279c",
+  "config": {
+    "model": "moe_linear",
+    "basis": "magnetic",
+    "graph": "real",
+    "loss_mask": "ever_active",
+    "seed": 0,
+    "lr": 0.003,
+    "batch_size": 16,
+    "max_epochs": 6,
+    "patience": 6,
+    "weight_decay": 0.0001,
+    "n_conditions": 300,
+    "device": "cuda",
+    "tag": "_pilot",
+    "tf32": true,
+    "model_dtype": "float32"
+  }
+}

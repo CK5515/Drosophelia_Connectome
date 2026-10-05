@@ -1,0 +1,22 @@
+{
+  "experiment": "p2_mlp_magnetic_real_all_observed_seed0",
+  "timestamp": "20261003-043054",
+  "git_commit": "6fb2eaf3529b1e2cbd5b3804e68c8a8b4de2e42b",
+  "config": {
+    "model": "mlp",
+    "basis": "magnetic",
+    "graph": "real",
+    "loss_mask": "all_observed",
+    "seed": 0,
+    "lr": 0.003,
+    "batch_size": 16,
+    "max_epochs": 40,
+    "patience": 8,
+    "weight_decay": 0.0001,
+    "n_conditions": null,
+    "device": "cuda",
+    "tag": "",
+    "tf32": true,
+    "model_dtype": "float32"
+  }
+}

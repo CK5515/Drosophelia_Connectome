@@ -1,0 +1,16 @@
+{
+  "experiment": "p2_r6_controls",
+  "timestamp": "20261003-130247",
+  "git_commit": "1d17a38d0917f083c4173e0a8b75e86559e53beb",
+  "config": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "lr": 0.01,
+    "loss_mask": "all_observed",
+    "r5_source": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_r5_moe/20261003-124145",
+    "rewiring_source": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_rewired/20261003-124855"
+  }
+}

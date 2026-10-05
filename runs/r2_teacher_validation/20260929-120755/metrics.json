@@ -1,0 +1,87 @@
+{
+  "checks": {
+    "mn9_dose_response": true,
+    "bitter_suppression": true,
+    "network_rates_r_gt_0.9": true
+  },
+  "pass": true,
+  "mn9_flywire_id": 720575940660219265,
+  "dose": [
+    {
+      "hz": 50,
+      "port_mean": 19.833333333333332,
+      "port_se": 1.1939342223100338,
+      "brian_mean": 19.533333333333335,
+      "brian_se": 1.1035296904831233,
+      "within_2se": true
+    },
+    {
+      "hz": 100,
+      "port_mean": 67.73333333333333,
+      "port_se": 0.8616121394961905,
+      "brian_mean": 67.76666666666667,
+      "brian_se": 0.6039778737922867,
+      "within_2se": true
+    },
+    {
+      "hz": 150,
+      "port_mean": 82.83333333333333,
+      "port_se": 0.9590264859566098,
+      "brian_mean": 84.43333333333334,
+      "brian_se": 0.8230631507919494,
+      "within_2se": true
+    },
+    {
+      "hz": 200,
+      "port_mean": 92.5,
+      "port_se": 0.7235766845268058,
+      "brian_mean": 90.6,
+      "brian_se": 1.1023485899628591,
+      "within_2se": true
+    }
+  ],
+  "bitter": [
+    {
+      "hz": 0,
+      "port_mean": 66.73333333333333,
+      "port_se": 0.5651433209196376,
+      "brian_mean": 66.1,
+      "brian_se": 1.0895005710199852
+    },
+    {
+      "hz": 50,
+      "port_mean": 37.733333333333334,
+      "port_se": 1.391214910501992,
+      "brian_mean": 39.86666666666667,
+      "brian_se": 0.9392260611108125
+    },
+    {
+      "hz": 100,
+      "port_mean": 3.466666666666667,
+      "port_se": 0.4812181222959642,
+      "brian_mean": 4.533333333333333,
+      "brian_se": 0.526828143439876
+    },
+    {
+      "hz": 150,
+      "port_mean": 0.4,
+      "port_se": 0.1485562705416415,
+      "brian_mean": 0.3333333333333333,
+      "brian_se": 0.09980824526939037
+    },
+    {
+      "hz": 200,
+      "port_mean": 0.03333333333333333,
+      "port_se": 0.033333333333333326,
+      "brian_mean": 0.1,
+      "brian_se": 0.07350033231608351
+    }
+  ],
+  "spearman_bitter_port": -0.9999999999999999,
+  "spearman_bitter_brian": -0.9999999999999999,
+  "network_pearson_r": 0.9995054231946451,
+  "network_n_active": 346,
+  "throughput_batch_size": 256,
+  "trials_per_hour": 6344.973121927823,
+  "conditions_per_hour_R4": 1586.2432804819557
+}

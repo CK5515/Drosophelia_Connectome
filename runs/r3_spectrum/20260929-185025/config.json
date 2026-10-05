@@ -1,0 +1,10 @@
+{
+  "experiment": "r3_spectrum",
+  "timestamp": "20260929-185025",
+  "git_commit": "280ca46ecb5c0fef6a7ff28e49350f72671bf309",
+  "config": {
+    "K": 4,
+    "q": 0.25,
+    "n_neurons": 5000
+  }
+}

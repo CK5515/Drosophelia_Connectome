@@ -1,0 +1,49 @@
+{
+  "r2_observed_active_mean": -19.856522999555594,
+  "r2_observed_active_median": -0.4613343588878902,
+  "pooled_r2_observed_active": 0.04537445619131841,
+  "normalised_r2_observed_active": -10.429046953672596,
+  "n_observed_active": 499,
+  "n_observed_active_ceiling_usable": 439,
+  "r2_heldout_active_mean": null,
+  "r2_heldout_active_median": null,
+  "pooled_r2_heldout_active": null,
+  "normalised_r2_heldout_active": null,
+  "n_heldout_active": 97,
+  "n_heldout_active_ceiling_usable": 84,
+  "mn9_trace_r2": [
+    0.04677917725234049,
+    -0.08031426273248421
+  ],
+  "history": {
+    "train_loss": [
+      1.2192041277885437,
+      1.1212276220321655
+    ],
+    "val_loss": [
+      1.1028974056243896,
+      1.0640968084335327
+    ],
+    "best_epoch": 2,
+    "stopped_early": false
+  },
+  "n_parameters": 23427678,
+  "n_loss_mask": 903,
+  "n_scored_without_prediction": 109,
+  "target_std_hz": 23.425857543945312,
+  "config": {
+    "model": "mlp",
+    "basis": "magnetic",
+    "graph": "real",
+    "loss_mask": "ever_active",
+    "seed": 0,
+    "lr": 0.001,
+    "batch_size": 16,
+    "max_epochs": 2,
+    "patience": 2,
+    "weight_decay": 0.0001,
+    "n_conditions": 24,
+    "device": "cuda",
+    "tag": ""
+  }
+}

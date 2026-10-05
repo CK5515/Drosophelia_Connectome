@@ -1,0 +1,22 @@
+{
+  "experiment": "p2_moe_full_magnetic_real_ever_active_seed0",
+  "timestamp": "20260930-163205",
+  "git_commit": "1de44b816b2463454f2a844752a023a925479b46",
+  "config": {
+    "model": "moe_full",
+    "basis": "magnetic",
+    "graph": "real",
+    "loss_mask": "ever_active",
+    "seed": 0,
+    "lr": 0.001,
+    "batch_size": 16,
+    "max_epochs": 2,
+    "patience": 2,
+    "weight_decay": 0.0001,
+    "n_conditions": 24,
+    "device": "cuda",
+    "tag": "",
+    "tf32": true,
+    "model_dtype": "float32"
+  }
+}

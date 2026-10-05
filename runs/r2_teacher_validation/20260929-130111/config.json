@@ -1,0 +1,22 @@
+{
+  "experiment": "r2_teacher_validation",
+  "timestamp": "20260929-130111",
+  "git_commit": "9b936ea303a8e8cb28594afbb51ee7daf10d5709-dirty",
+  "config": {
+    "dose_hz": [
+      50,
+      100,
+      150,
+      200
+    ],
+    "bitter_hz": [
+      0,
+      50,
+      100,
+      150,
+      200
+    ],
+    "n_trials": 30,
+    "n_proc": 30
+  }
+}

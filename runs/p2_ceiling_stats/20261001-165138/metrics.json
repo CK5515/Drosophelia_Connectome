@@ -1,0 +1,29 @@
+{
+  "n_neurons": 5000,
+  "median_ceiling_all_neurons": 0.2889098828699965,
+  "n_ceiling_ge_0.1_all_neurons": 966,
+  "observed_active": {
+    "n": 846,
+    "median_ceiling": 0.4395996668986524,
+    "n_ceiling_usable": 771
+  },
+  "heldout_active": {
+    "n": 193,
+    "median_ceiling": 0.2895647537431695,
+    "n_ceiling_usable": 177
+  },
+  "scored_union": {
+    "n": 1039,
+    "median_ceiling": 0.4183408257906367,
+    "n_ceiling_usable": 948
+  },
+  "step0_cost": {
+    "source": "run folder timestamps of runs/p2_moe_linear_magnetic_real_ever_active_seed0_step0/20260930-164702 (config.json 16:47:02 to metrics.json 16:50:50), not a recorded metric; upper bound, includes evaluation",
+    "epoch_seconds_upper_bound": 228,
+    "steps_per_epoch": 132,
+    "seconds_per_step_upper_bound": 1.7272727272727273,
+    "gpu_peak_torch_allocated_gb": 4.57,
+    "gpu_peak_nvidia_smi_mib_incl_cuda_context": 7723,
+    "gpu_peak_source": "untracked runs/step0_gpumem.log (nvidia-smi samples; max 7723 MiB including CUDA context); the 4.57 GB torch-allocated figure came from the step-zero agent's report"
+  }
+}

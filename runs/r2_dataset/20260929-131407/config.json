@@ -1,0 +1,12 @@
+{
+  "experiment": "r2_dataset",
+  "timestamp": "20260929-131407",
+  "git_commit": "6ddfe078b3f1d5517800bfc6a15191052c493bc3",
+  "config": {
+    "n_conditions": 3000,
+    "n_trials": 4,
+    "batch_size": 256,
+    "seed": 0,
+    "out": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/data/processed/dataset_v1"
+  }
+}

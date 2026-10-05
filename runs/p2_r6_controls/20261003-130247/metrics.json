@@ -1,0 +1,186 @@
+{
+  "real_normalised_r2": [
+    -2.9467717940121902,
+    -0.48022518855664903,
+    -1.3479054271148994
+  ],
+  "knockouts": {
+    "baseline_mean_r2": -0.6757984540428477,
+    "per_band": {
+      "0": {
+        "by_hop": {
+          "0": {
+            "mean": 0.024452000858288293,
+            "median": 0.025013887879622387,
+            "n": 88
+          },
+          "1": {
+            "mean": -2.0480553745560863,
+            "median": 0.19887579160223173,
+            "n": 194
+          },
+          "2": {
+            "mean": -0.1325784532935936,
+            "median": 0.04449834887725751,
+            "n": 564
+          }
+        },
+        "mean_delta_observed_active": -0.5554907969810144
+      },
+      "1": {
+        "by_hop": {
+          "0": {
+            "mean": 8.87650303008333e-10,
+            "median": 9.451911475721886e-11,
+            "n": 88
+          },
+          "1": {
+            "mean": 2.837334200235734e-08,
+            "median": 1.1953021905597438e-10,
+            "n": 194
+          },
+          "2": {
+            "mean": -2.0381370398130183e-08,
+            "median": -4.469030701059751e-10,
+            "n": 564
+          }
+        },
+        "mean_delta_observed_active": -6.9888313586564606e-09
+      },
+      "2": {
+        "by_hop": {
+          "0": {
+            "mean": 4.854047315609607e-10,
+            "median": 1.5945023079666498e-12,
+            "n": 88
+          },
+          "1": {
+            "mean": 3.456100318762081e-08,
+            "median": 3.4344638244476755e-11,
+            "n": 194
+          },
+          "2": {
+            "mean": -2.6288302174780865e-08,
+            "median": -7.764044962499383e-11,
+            "n": 564
+          }
+        },
+        "mean_delta_observed_active": -9.549707082506628e-09
+      },
+      "3": {
+        "by_hop": {
+          "0": {
+            "mean": 7.511213658626594e-10,
+            "median": -6.738709590337066e-11,
+            "n": 88
+          },
+          "1": {
+            "mean": -2.446932664113915e-07,
+            "median": 1.2887573230813132e-09,
+            "n": 194
+          },
+          "2": {
+            "mean": 3.8143751351325064e-08,
+            "median": 2.2848400949015968e-10,
+            "n": 564
+          }
+        },
+        "mean_delta_observed_active": -3.0604396266509104e-08
+      }
+    }
+  },
+  "knockout_run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed0/20261001-235459",
+  "rewiring": {
+    "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_rewired/20261003-124855",
+    "per_seed": {
+      "0": {
+        "frac_edges_displaced": 0.9448390073793604,
+        "in_degree_preserved": true,
+        "out_degree_preserved": true,
+        "sign_counts_preserved": true,
+        "weight_multiset_preserved": true
+      },
+      "1": {
+        "frac_edges_displaced": 0.944521654756824,
+        "in_degree_preserved": true,
+        "out_degree_preserved": true,
+        "sign_counts_preserved": true,
+        "weight_multiset_preserved": true
+      },
+      "2": {
+        "frac_edges_displaced": 0.9443885125646104,
+        "in_degree_preserved": true,
+        "out_degree_preserved": true,
+        "sign_counts_preserved": true,
+        "weight_multiset_preserved": true
+      }
+    }
+  },
+  "disclosures": [
+    "reciprocity is not preserved: 52.9% of reciprocal pairs in the real subcircuit have opposite signs, and the swap procedure does not protect that structure, so a real-beats-rewired gap means 'something beyond degree and sign', not specifically reciprocity",
+    "unweighted in-degree and out-degree are preserved exactly, and weighted out-strength is preserved because weights travel with their source edge, but weighted in-strength is not",
+    "swaps_per_edge=10.0 counts attempted swaps, not accepted ones; swaps that would create a self-loop or a duplicate edge are skipped, so the realised displacement is the number that matters and is reported per seed",
+    "one rewired graph is drawn per seed, so the three rewired runs differ in both initialisation and graph; this is deliberate - a single fixed rewiring would conflate 'this graph is easy' with 'rewired graphs are easy'"
+  ],
+  "complete": true,
+  "arms": {
+    "rewired": [
+      {
+        "seed": 0,
+        "normalised_r2_observed_active": -7.6731787770697215,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_rewired_all_observed_seed0/20261003-130622"
+      },
+      {
+        "seed": 1,
+        "normalised_r2_observed_active": -4.5365326640805135,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_rewired_all_observed_seed1/20261003-152847"
+      },
+      {
+        "seed": 2,
+        "normalised_r2_observed_active": -8.940777859703571,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_rewired_all_observed_seed2/20261003-175225"
+      }
+    ],
+    "symmetric": [
+      {
+        "seed": 0,
+        "normalised_r2_observed_active": -1.6322968408643208,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_symmetric_real_all_observed_seed0/20261003-201448"
+      },
+      {
+        "seed": 1,
+        "normalised_r2_observed_active": -1.4163452342154297,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_symmetric_real_all_observed_seed1/20261003-223811"
+      },
+      {
+        "seed": 2,
+        "normalised_r2_observed_active": -1.0534307667117893,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_symmetric_real_all_observed_seed2/20261004-010057"
+      }
+    ]
+  },
+  "verdicts": {
+    "real_beats_rewired": {
+      "mean_diff": 5.458528963723356,
+      "std_diff": 1.878516667430779,
+      "all_same_sign": true,
+      "beats": true,
+      "per_seed": [
+        4.726406983057531,
+        4.056307475523864,
+        7.592872432588672
+      ]
+    },
+    "magnetic_beats_symmetric": {
+      "mean_diff": -0.22427652263073297,
+      "std_diff": 1.1269384615290263,
+      "all_same_sign": false,
+      "beats": false,
+      "per_seed": [
+        -1.3144749531478694,
+        0.9361200456587806,
+        -0.2944746604031101
+      ]
+    }
+  }
+}

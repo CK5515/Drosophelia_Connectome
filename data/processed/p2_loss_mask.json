@@ -1,0 +1,6 @@
+{
+  "policy": "all_observed",
+  "reason": "ever_active minus all_observed = -5.4277 on normalised_r2_observed_active; pooled seed spread = 1.6757; adopted all_observed by the rule fixed before the runs",
+  "diff": -5.4277337844596305,
+  "spread": 1.6757190692194686
+}

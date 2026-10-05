@@ -1,0 +1,243 @@
+{
+  "loss_mask": "all_observed",
+  "learning_rates": {
+    "moe": 0.01,
+    "chebgru": 0.01,
+    "mlp": 0.003
+  },
+  "lr_source": "p2_lr.json (extended pilot with controller override: moe=0.01, chebgru=0.01)",
+  "complete": true,
+  "results": {
+    "moe_linear": [
+      {
+        "normalised_r2_observed_active": -3.554570923944338,
+        "r2_observed_active_mean": -0.9157572355851221,
+        "r2_observed_active_median": -0.04772865879948396,
+        "pooled_r2_observed_active": 0.7582006639990948,
+        "r2_heldout_active_mean": -0.4977730793832044,
+        "n_parameters": 425,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          -0.12833210219069513,
+          -0.11516500687096642
+        ],
+        "best_epoch": 39,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_linear_magnetic_real_all_observed_seed0/20261002-143645",
+        "seed": 0,
+        "lr": 0.01
+      },
+      {
+        "normalised_r2_observed_active": -3.6454773496909785,
+        "r2_observed_active_mean": -0.9305265497986762,
+        "r2_observed_active_median": -0.04776626335535228,
+        "pooled_r2_observed_active": 0.7593075678739842,
+        "r2_heldout_active_mean": -0.4701038132262236,
+        "n_parameters": 425,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          -0.12988140579821095,
+          -0.12059854836980133
+        ],
+        "best_epoch": 39,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_linear_magnetic_real_all_observed_seed1/20261002-165531",
+        "seed": 1,
+        "lr": 0.01
+      },
+      {
+        "normalised_r2_observed_active": -3.7136291392032064,
+        "r2_observed_active_mean": -0.9658117273010025,
+        "r2_observed_active_median": -0.046811365288087825,
+        "pooled_r2_observed_active": 0.759736275304408,
+        "r2_heldout_active_mean": -0.5268186305088414,
+        "n_parameters": 425,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          -0.11819034915943916,
+          -0.10802444231376818
+        ],
+        "best_epoch": 40,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_linear_magnetic_real_all_observed_seed2/20261002-191410",
+        "seed": 2,
+        "lr": 0.01
+      }
+    ],
+    "moe_single": [
+      {
+        "normalised_r2_observed_active": -2.444941898070023,
+        "r2_observed_active_mean": -0.566754157016933,
+        "r2_observed_active_median": -0.011229755811466569,
+        "pooled_r2_observed_active": 0.7993819946281059,
+        "r2_heldout_active_mean": -0.5291777714910997,
+        "n_parameters": 323,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          -0.08673681849374537,
+          -0.1419301967257427
+        ],
+        "best_epoch": 39,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_single_magnetic_real_all_observed_seed0/20261002-213248",
+        "seed": 0,
+        "lr": 0.01
+      },
+      {
+        "normalised_r2_observed_active": -2.315867346710641,
+        "r2_observed_active_mean": -0.5013192700987594,
+        "r2_observed_active_median": -0.014036122603376389,
+        "pooled_r2_observed_active": 0.8026853033153775,
+        "r2_heldout_active_mean": -0.5464303081175912,
+        "n_parameters": 323,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          -0.031503618409373546,
+          -0.09859002069254541
+        ],
+        "best_epoch": 38,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_single_magnetic_real_all_observed_seed1/20261002-235204",
+        "seed": 1,
+        "lr": 0.01
+      },
+      {
+        "normalised_r2_observed_active": -2.205421516735468,
+        "r2_observed_active_mean": -0.597210203164607,
+        "r2_observed_active_median": -0.010403404803485006,
+        "pooled_r2_observed_active": 0.7782975843115005,
+        "r2_heldout_active_mean": -0.8164917786780573,
+        "n_parameters": 323,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          -0.0969776490614569,
+          -0.12639702939294728
+        ],
+        "best_epoch": 39,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_single_magnetic_real_all_observed_seed2/20261003-021128",
+        "seed": 2,
+        "lr": 0.01
+      }
+    ],
+    "mlp": [
+      {
+        "normalised_r2_observed_active": 0.8523322625482102,
+        "r2_observed_active_mean": 0.4502265175569054,
+        "r2_observed_active_median": 0.3752201876198159,
+        "pooled_r2_observed_active": 0.9040071288220497,
+        "r2_heldout_active_mean": null,
+        "n_parameters": 103327428,
+        "n_scored_without_prediction": 193,
+        "mn9_trace_r2": [
+          0.8299470787303421,
+          0.7554082141767267
+        ],
+        "best_epoch": 34,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_mlp_magnetic_real_all_observed_seed0/20261003-043054",
+        "seed": 0,
+        "lr": 0.003
+      },
+      {
+        "normalised_r2_observed_active": 0.8546356125818533,
+        "r2_observed_active_mean": 0.45114577567555725,
+        "r2_observed_active_median": 0.3785517986932703,
+        "pooled_r2_observed_active": 0.9042251107493033,
+        "r2_heldout_active_mean": null,
+        "n_parameters": 103327428,
+        "n_scored_without_prediction": 193,
+        "mn9_trace_r2": [
+          0.8287469163402729,
+          0.7562798667832035
+        ],
+        "best_epoch": 33,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_mlp_magnetic_real_all_observed_seed1/20261003-043623",
+        "seed": 1,
+        "lr": 0.003
+      },
+      {
+        "normalised_r2_observed_active": 0.8283663717086539,
+        "r2_observed_active_mean": 0.44536647760568066,
+        "r2_observed_active_median": 0.3705228466596946,
+        "pooled_r2_observed_active": 0.9038204395485898,
+        "r2_heldout_active_mean": null,
+        "n_parameters": 103327428,
+        "n_scored_without_prediction": 193,
+        "mn9_trace_r2": [
+          0.8287239530389782,
+          0.7552275041232857
+        ],
+        "best_epoch": 30,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_mlp_magnetic_real_all_observed_seed2/20261003-044151",
+        "seed": 2,
+        "lr": 0.003
+      }
+    ],
+    "mean": [
+      {
+        "normalised_r2_observed_active": 0.14491219775654213,
+        "r2_observed_active_mean": 0.10527423511803488,
+        "r2_observed_active_median": 0.035789112044481985,
+        "pooled_r2_observed_active": 0.45847198049976223,
+        "r2_heldout_active_mean": null,
+        "n_parameters": 0,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          0.18363488470237166,
+          0.18946524199979198
+        ],
+        "best_epoch": 0,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_mean_magnetic_real_all_observed_seed0/20261003-044705",
+        "seed": 0,
+        "lr": 0.01
+      }
+    ],
+    "chebgru": [
+      {
+        "normalised_r2_observed_active": -1.4940827187486818,
+        "r2_observed_active_mean": -0.14967918116870332,
+        "r2_observed_active_median": -0.00856873803226399,
+        "pooled_r2_observed_active": 0.861575029749956,
+        "r2_heldout_active_mean": -0.7996030378518626,
+        "n_parameters": 2513,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          0.676090238638209,
+          0.5737273223828503
+        ],
+        "best_epoch": 40,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_chebgru_magnetic_real_all_observed_seed0/20261003-044750",
+        "seed": 0,
+        "lr": 0.01
+      },
+      {
+        "normalised_r2_observed_active": -1.1717078125269287,
+        "r2_observed_active_mean": -0.14228691737335425,
+        "r2_observed_active_median": -0.013294210226981629,
+        "pooled_r2_observed_active": 0.8540010078588932,
+        "r2_heldout_active_mean": -1.3583880675031443,
+        "n_parameters": 2513,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          0.5916076982913059,
+          0.5749372870135748
+        ],
+        "best_epoch": 40,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_chebgru_magnetic_real_all_observed_seed1/20261003-072550",
+        "seed": 1,
+        "lr": 0.01
+      },
+      {
+        "normalised_r2_observed_active": -1.5336045233438966,
+        "r2_observed_active_mean": -0.11258270623382802,
+        "r2_observed_active_median": -0.009486064750671819,
+        "pooled_r2_observed_active": 0.8586002571057072,
+        "r2_heldout_active_mean": -0.8383310063718086,
+        "n_parameters": 2513,
+        "n_scored_without_prediction": 0,
+        "mn9_trace_r2": [
+          0.6628552347424677,
+          0.5421248917852386
+        ],
+        "best_epoch": 40,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_chebgru_magnetic_real_all_observed_seed2/20261003-100349",
+        "seed": 2,
+        "lr": 0.01
+      }
+    ]
+  }
+}

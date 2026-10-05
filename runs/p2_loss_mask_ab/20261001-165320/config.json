@@ -1,0 +1,13 @@
+{
+  "experiment": "p2_loss_mask_ab",
+  "timestamp": "20261001-165320",
+  "git_commit": "24d25179130fa6e39bf95f9b9c737637ed852474",
+  "config": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "lr": 0.01
+  }
+}

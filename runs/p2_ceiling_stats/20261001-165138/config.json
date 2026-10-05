@@ -1,0 +1,9 @@
+{
+  "experiment": "p2_ceiling_stats",
+  "timestamp": "20261001-165138",
+  "git_commit": "0b0e96f818545fa87c5b10b7eb5f644e4ab553d3",
+  "config": {
+    "split": "test",
+    "script": "scripts/07_ceiling_stats.py"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "checks": {
+    "mn9_dose_response": true,
+    "bitter_suppression": true,
+    "network_rates_r_gt_0.9": true
+  },
+  "pass": true,
+  "mn9_flywire_id": 720575940660219265,
+  "dose": [
+    {
+      "hz": 50,
+      "port_mean": 19.833333333333332,
+      "port_se": 1.1939342223100338,
+      "brian_mean": 19.533333333333335,
+      "brian_se": 1.1035296904831233,
+      "within_2se": true
+    },
+    {
+      "hz": 100,
+      "port_mean": 67.73333333333333,
+      "port_se": 0.8616121394961905,
+      "brian_mean": 67.76666666666667,
+      "brian_se": 0.6039778737922867,
+      "within_2se": true
+    },
+    {
+      "hz": 150,
+      "port_mean": 83.03333333333333,
+      "port_se": 0.9947948824946516,
+      "brian_mean": 84.43333333333334,
+      "brian_se": 0.8230631507919494,
+      "within_2se": true
+    },
+    {
+      "hz": 200,
+      "port_mean": 92.56666666666666,
+      "port_se": 0.7186886738788124,
+      "brian_mean": 90.6,
+      "brian_se": 1.1023485899628591,
+      "within_2se": true
+    }
+  ],
+  "bitter": [
+    {
+      "hz": 0,
+      "port_mean": 66.73333333333333,
+      "port_se": 0.5651433209196376,
+      "brian_mean": 66.1,
+      "brian_se": 1.0895005710199852
+    },
+    {
+      "hz": 50,
+      "port_mean": 37.733333333333334,
+      "port_se": 1.391214910501992,
+      "brian_mean": 39.86666666666667,
+      "brian_se": 0.9392260611108125
+    },
+    {
+      "hz": 100,
+      "port_mean": 3.466666666666667,
+      "port_se": 0.4812181222959642,
+      "brian_mean": 4.533333333333333,
+      "brian_se": 0.526828143439876
+    },
+    {
+      "hz": 150,
+      "port_mean": 0.4,
+      "port_se": 0.1485562705416415,
+      "brian_mean": 0.3333333333333333,
+      "brian_se": 0.09980824526939037
+    },
+    {
+      "hz": 200,
+      "port_mean": 0.03333333333333333,
+      "port_se": 0.033333333333333326,
+      "brian_mean": 0.1,
+      "brian_se": 0.07350033231608351
+    }
+  ],
+  "spearman_bitter_port": -0.9999999999999999,
+  "spearman_bitter_brian": -0.9999999999999999,
+  "network_pearson_r": 0.9995054231946451,
+  "network_n_active": 346,
+  "throughput_batch_size": 256,
+  "trials_per_hour": 6354.229394961007,
+  "conditions_per_hour_R4": 1588.5573487402517,
+  "brian2_seconds": "skipped (reused existing parquet files)",
+  "network_spearman_rho": 0.9987821343787509,
+  "network_median_abs_diff_hz": 0.3333333333333348,
+  "network_p90_abs_diff_hz": 1.25,
+  "excl_inputs_pearson_r": 0.9996101499976381,
+  "excl_inputs_spearman_rho": 0.9987930869493266,
+  "excl_inputs_median_abs_diff_hz": 0.33333333333333304,
+  "excl_inputs_n_active": 325
+}

@@ -1,0 +1,59 @@
+{
+  "reports": {
+    "0": {
+      "out_degree_preserved": true,
+      "in_degree_preserved": true,
+      "sign_counts_preserved": true,
+      "weight_multiset_preserved": true,
+      "frac_edges_displaced": 0.9448390073793604,
+      "n_self_loops": 0,
+      "n_duplicate_pairs": 0,
+      "eig_min": 0.41285533171182015,
+      "eig_max": 1.5893415320790725,
+      "eig_in_range": true,
+      "orthonormality_max_err": 7.748603820800781e-06,
+      "orthonormal": true,
+      "eigenvalue_range": [
+        0.41285533171182015,
+        1.5893415320790725
+      ]
+    },
+    "1": {
+      "out_degree_preserved": true,
+      "in_degree_preserved": true,
+      "sign_counts_preserved": true,
+      "weight_multiset_preserved": true,
+      "frac_edges_displaced": 0.944521654756824,
+      "n_self_loops": 0,
+      "n_duplicate_pairs": 0,
+      "eig_min": 0.4138864301308924,
+      "eig_max": 1.588204547576418,
+      "eig_in_range": true,
+      "orthonormality_max_err": 8.58306884765625e-06,
+      "orthonormal": true,
+      "eigenvalue_range": [
+        0.4138864301308924,
+        1.588204547576418
+      ]
+    },
+    "2": {
+      "out_degree_preserved": true,
+      "in_degree_preserved": true,
+      "sign_counts_preserved": true,
+      "weight_multiset_preserved": true,
+      "frac_edges_displaced": 0.9443885125646104,
+      "n_self_loops": 0,
+      "n_duplicate_pairs": 0,
+      "eig_min": 0.4129774547280658,
+      "eig_max": 1.5890654199510095,
+      "eig_in_range": true,
+      "orthonormality_max_err": 5.0067901611328125e-06,
+      "orthonormal": true,
+      "eigenvalue_range": [
+        0.4129774547280658,
+        1.5890654199510095
+      ]
+    }
+  },
+  "pass": true
+}

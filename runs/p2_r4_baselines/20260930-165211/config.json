@@ -1,0 +1,24 @@
+{
+  "experiment": "p2_r4_baselines",
+  "timestamp": "20260930-165211",
+  "git_commit": "25383a293ae4cceab0f023e8e9352b4f613b279c",
+  "config": {
+    "pilot_lrs": [
+      0.0003,
+      0.001,
+      0.003
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "baselines": [
+      "mean",
+      "mlp",
+      "chebgru",
+      "moe_linear",
+      "moe_single"
+    ]
+  }
+}

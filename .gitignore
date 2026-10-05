@@ -1,0 +1,17 @@
+/data/**
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Ship the small evidence files; everything else under these dirs stays ignored.
+!/runs/
+/runs/**
+!/runs/**/
+!/data/**/
+!/runs/**/config.json
+!/runs/**/metrics.json
+!/data/processed/r2_gate.json
+!/data/processed/p2_lr.json
+!/data/processed/p2_loss_mask.json
+!/data/processed/dataset_v1/meta.json

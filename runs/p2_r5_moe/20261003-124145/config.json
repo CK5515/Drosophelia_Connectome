@@ -1,0 +1,13 @@
+{
+  "experiment": "p2_r5_moe",
+  "timestamp": "20261003-124145",
+  "git_commit": "6fb2eaf3529b1e2cbd5b3804e68c8a8b4de2e42b",
+  "config": {
+    "loss_mask": "all_observed",
+    "headline_runs": [
+      "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed0/20261001-235459",
+      "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed1/20261002-021548",
+      "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed2/20261002-043637"
+    ]
+  }
+}

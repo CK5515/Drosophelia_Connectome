@@ -1,0 +1,60 @@
+{
+  "arms": {
+    "ever_active": [
+      {
+        "seed": 0,
+        "normalised_r2_observed_active": -7.977245638789086,
+        "r2_observed_active_mean": -2.0621420251472413,
+        "r2_heldout_active_mean": -2.44656954050105,
+        "n_loss_mask": 1062,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_ever_active_seed0/20261001-165359"
+      },
+      {
+        "seed": 1,
+        "normalised_r2_observed_active": -5.795867912720025,
+        "r2_observed_active_mean": -1.9722792742075599,
+        "r2_heldout_active_mean": -1.4865407376149662,
+        "n_loss_mask": 1062,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_ever_active_seed1/20261001-191409"
+      },
+      {
+        "seed": 2,
+        "normalised_r2_observed_active": -7.2849902115535174,
+        "r2_observed_active_mean": -1.8734972798745573,
+        "r2_heldout_active_mean": -1.8392606819677475,
+        "n_loss_mask": 1062,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_ever_active_seed2/20261001-213428"
+      }
+    ],
+    "all_observed": [
+      {
+        "seed": 0,
+        "normalised_r2_observed_active": -2.9467717940121902,
+        "r2_observed_active_mean": -0.6758725100124447,
+        "r2_heldout_active_mean": -0.6973406580930595,
+        "n_loss_mask": 4018,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed0/20261001-235459"
+      },
+      {
+        "seed": 1,
+        "normalised_r2_observed_active": -0.48022518855664903,
+        "r2_observed_active_mean": -0.15701262353461706,
+        "r2_heldout_active_mean": -0.10623817372026215,
+        "n_loss_mask": 4018,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed1/20261002-021548"
+      },
+      {
+        "seed": 2,
+        "normalised_r2_observed_active": -1.3479054271148994,
+        "r2_observed_active_mean": -0.38493429693170833,
+        "r2_heldout_active_mean": -0.3846506037218644,
+        "n_loss_mask": 4018,
+        "run_dir": "/home/cyprian/WEIRD PROJECTS/FLY BRAIN/runs/p2_moe_full_magnetic_real_all_observed_seed2/20261002-043637"
+      }
+    ]
+  },
+  "diff": -5.4277337844596305,
+  "pooled_spread": 1.6757190692194686,
+  "policy": "all_observed",
+  "reason": "ever_active minus all_observed = -5.4277 on normalised_r2_observed_active; pooled seed spread = 1.6757; adopted all_observed by the rule fixed before the runs"
+}
